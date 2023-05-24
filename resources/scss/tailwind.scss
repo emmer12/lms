@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        // @apply bg-gray-50;
+        background: #f2f4f7;
+        font-family: "Urbanist", sans-serif;
+        color: #656b80;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #231f40;
+    }
+    .base-link {
+        @apply text-blue-400;
+        @apply hover:text-blue-500;
+        @apply hover:underline;
+        @apply transition;
+    }
+
+    .container-x {
+        @apply container mx-auto px-12;
+    }
+}
+
+.avatar {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+
+    img {
+        border-radius: 100px;
+    }
+}
