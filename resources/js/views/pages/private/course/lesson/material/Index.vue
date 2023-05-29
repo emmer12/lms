@@ -44,46 +44,16 @@
                         </div>
                     </div>
                 </template>
-                <template v-slot:content-status="props">
-                    <span
-                        v-if="props.item.published"
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                        v-html="trans('Live')"
-                    ></span>
-                    <span
-                        v-else
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                        v-html="trans('Draft')"
-                    ></span>
-                </template>
+
                 <template v-slot:content-createdAt="props">
                     <span>{{ props.item.created_at }}</span>
                 </template>
 
-                <template v-slot:content-question="props">
+                <template v-slot:content-quiz="props">
                     <Button
-                        :to="{
-                            name: 'course.lesson.question.list',
-                            params: {
-                                id: props.item.id,
-                                courseId: props.item.course_id,
-                            },
-                        }"
                         size="sm"
                         v-if="props.item.content_type === 'quiz'"
-                        label="Questions"
-                    />
-                    <Button
-                        :to="{
-                            name: 'course.lesson.material.list',
-                            params: {
-                                id: props.item.id,
-                                courseId: props.item.course_id,
-                            },
-                        }"
-                        size="sm"
-                        v-else
-                        label="Materials"
+                        label="Add Quiz"
                     />
                 </template>
             </Table>
@@ -128,29 +98,11 @@ export default defineComponent({
             page: 1,
             search: "",
             sort: "",
-            filters: {
-                first_name: {
-                    value: "",
-                    comparison: "=",
-                },
-                last_name: {
-                    value: "",
-                    comparison: "=",
-                },
-                role: {
-                    value: "",
-                    comparison: "=",
-                },
-                email: {
-                    value: "",
-                    comparison: "=",
-                },
-            },
         });
 
         const page = reactive({
-            id: "list_lessons",
-            title: "Lessons",
+            id: "list_materials",
+            title: "Materials",
             breadcrumbs: [
                 {
                     name: "Courses",
@@ -158,21 +110,21 @@ export default defineComponent({
                 },
                 {
                     name: "Lessons",
+                    to: toUrl(`/course/${route.params.courseId}/lessons`),
+                },
+                {
+                    name: "Materials",
                     active: true,
                 },
             ],
             actions: [
                 {
-                    id: "filters",
-                    name: trans("global.buttons.filters"),
-                    icon: "fa fa-filter",
-                    theme: "outline",
-                },
-                {
                     id: "new",
                     name: trans("global.buttons.add_new"),
                     icon: "fa fa-plus",
-                    to: toUrl(`/course/${route.params.id}/lesson/create`),
+                    to: toUrl(
+                        `course/${route.params.courseId}/lesson/${route.params.id}/material/create`
+                    ),
                 },
             ],
             toggleFilters: false,
@@ -181,14 +133,9 @@ export default defineComponent({
         const table = reactive({
             headers: {
                 id: trans("users.labels.id_pound"),
-                sortOrder: "Sort Order",
-                title: "Title",
-                content_type: "Content Type",
-                createdAt: "Created At",
-                question: "Question",
-            },
-            sorting: {
-                title: true,
+                title: "Material Title",
+                content_type: "Type",
+                createdAt: "createdAt",
             },
             pagination: {
                 meta: null,
@@ -257,7 +204,7 @@ export default defineComponent({
             table.loading = true;
             let query = prepareQuery(params);
             service
-                .getLessons(query, route.params.id)
+                .getLessonMaterials(query, route.params.id)
                 .then((response) => {
                     table.records = response.data.data;
                     table.pagination.meta = response.data.meta;

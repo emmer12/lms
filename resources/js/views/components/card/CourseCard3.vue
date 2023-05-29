@@ -9,7 +9,13 @@
                     }"
                 >
                     <img
-                        src="/assets/images/course2.jpg"
+                        v-if="course.preview_url"
+                        :src="course.preview_url"
+                        alt="Display Thumbnail"
+                    />
+                    <img
+                        v-else
+                        src="/assets/images/no-preview.jpg"
                         alt="Display Thumbnail"
                     />
                 </router-link>
@@ -23,9 +29,13 @@
                 >
                     <div
                         class="bg-blue-600 h-0.5 rounded-full"
-                        style="width: 45%"
+                        :style="`width: ${course?.course_log?.progress}%`"
                     ></div>
-                    <span v-if="course.progress > 0" class="text-xs">45%</span>
+                    <span
+                        v-if="course?.course_log?.progress > 0"
+                        class="text-xs"
+                        >{{ course?.course_log?.progress }}%</span
+                    >
                     <span v-else class="text-xs">START COURSE</span>
                 </div>
             </div>

@@ -82,6 +82,7 @@
                             <div class="tabs-body">
                                 <div v-if="activeTab == 1">
                                     <div
+                                        class="ck"
                                         v-html="results?.record?.description"
                                     ></div>
                                 </div>
@@ -507,8 +508,8 @@ export default {
                     await service.handleEnroll({
                         course_id: results.record.id,
                     });
-                    alertStore.info("You have successfully enrolled.");
-                    router.push(`/courses/learning/${results?.record?.slug}`);
+                    alertStore.success("You have successfully enrolled.");
+                    router.push(`/my/learning/${results?.record?.id}`);
                 } catch (err) {
                     alert("Opps, something went wrong");
                 }

@@ -9,7 +9,13 @@
                     }"
                 >
                     <img
-                        src="/assets/images/course2.jpg"
+                        v-if="course.preview_url"
+                        :src="course.preview_url"
+                        alt="Display Thumbnail"
+                    />
+                    <img
+                        v-else
+                        src="/assets/images/no-preview.jpg"
                         alt="Display Thumbnail"
                     />
                 </router-link>
@@ -94,7 +100,13 @@
                 <hr />
 
                 <div class="flex mt-5 mb-2">
-                    <Button label="Enroll Now" iconRight="fa fa-arrow-right" />
+                    <Button
+                        size="md"
+                        label="Enroll Now"
+                        iconRight="fa fa-arrow-right"
+                        @click="enroll"
+                        :disabled="isLoading"
+                    />
                 </div>
             </div>
         </div>
@@ -102,8 +114,53 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/stores/auth";
+import { useAlertStore } from "@/stores/alert";
+import { useRouter } from "vue-router";
+import CourseService from "@/services/CourseService";
+import { ref } from "vue";
+
 export default {
     props: ["course"],
+
+    setup(props) {
+        const service = new CourseService();
+        const authStore = useAuthStore();
+        const alertStore = useAlertStore();
+        const isLoading = ref(false);
+        const router = useRouter();
+
+        async function enroll() {
+            if (authStore.loggedIn) {
+                try {
+                    isLoading.value = true;
+                    await service.handleEnroll({
+                        course_id: props.course.id,
+                    });
+                    alertStore.success("You have successfully enrolled.");
+                    router.push(`/my/learning/${props?.course?.id}`);
+                    isLoading.value = false;
+                } catch (err) {
+                    isLoading.value = false;
+                    alert("Opps, something went wrong");
+                }
+            } else {
+                isLoading.value = false;
+                alertStore.info(
+                    "To proceed with your enrollment, kindly sign in or register."
+                );
+                localStorage.setItem(
+                    "session_enrolling",
+                    JSON.stringify({
+                        slug: props.course?.slug,
+                    })
+                );
+                router.push({ name: "login" });
+            }
+        }
+
+        return { enroll, isLoading };
+    },
 };
 </script>
 
@@ -128,8 +185,12 @@ export default {
     }
 
     .display {
+        height: 220px;
         img {
             transition: 0.3s;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
         }
         overflow: hidden;
 

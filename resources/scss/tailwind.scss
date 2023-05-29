@@ -25,7 +25,7 @@
     }
 
     .container-x {
-        @apply container mx-auto px-12;
+        @apply container mx-auto px-4 sm:px-12;
     }
 }
 
@@ -36,5 +36,37 @@
 
     img {
         border-radius: 100px;
+    }
+}
+
+.ck {
+    h1,
+    h2,
+    h3 {
+        margin: 15px 0px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    p {
+        margin: 0 0 20px;
+        font-weight: 500;
+    }
+
+    ul {
+        li {
+        }
+    }
+
+    a {
     }
 }

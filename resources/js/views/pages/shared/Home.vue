@@ -2,15 +2,18 @@
     <Guest>
         <div class="banner">
             <div class="container-x">
-                <div class="flex">
-                    <div class="content flex-1 w-fill/2">
+                <div class="flex flex-col sm:flex-row">
+                    <div class="content flex-1 w-full sm:w-fill/2">
                         <h4 class="mb-4">Welcome KingsWord Learning Portal</h4>
                         <h2 class="mb-8">
                             Start Better Learning Future From Here
                         </h2>
 
-                        <Button class="mb-16" label="Get Started Today" />
-                        <div class="flex item-center mb-16"></div>
+                        <Button
+                            class="mb-4 sm:mb-16"
+                            label="Get Started Today"
+                        />
+                        <div class="flex item-center mb-4 sm:mb-16"></div>
 
                         <p class="note">
                             Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -71,7 +74,7 @@
 
         <div class="out-pastor-section">
             <div class="container-x">
-                <div class="flex">
+                <div class="flex flex-col sm:flex-row">
                     <div class="img flex-1">
                         <img src="/assets/images/img1.jpg" alt="Pastor" />
                     </div>
@@ -215,6 +218,51 @@ export default {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         padding: 30px 0px;
+    }
+}
+
+@media (max-width: 640px) {
+    .banner {
+        background: linear-gradient(50deg, #140741, #fcad03);
+        .content {
+            padding-top: 80px;
+            width: 100%;
+            h2 {
+                font-size: 32px;
+                line-height: 42px;
+            }
+
+            p.note {
+                margin-left: 12px;
+                &:after {
+                    background: #fff;
+                }
+            }
+        }
+
+        .artworks {
+            padding: 50px 0px;
+        }
+    }
+
+    .course-section {
+        padding: 30px 0px;
+
+        .courses-grid {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
+    .out-pastor-section {
+        padding: 50px 0px;
+        .details {
+            padding: 20px 10px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            line-height: 32px;
+        }
     }
 }
 </style>

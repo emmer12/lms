@@ -6,6 +6,7 @@ use App\Http\Resources\CourseResource;
 use App\Http\Resources\EnrollmentResource;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\CourseMaterial;
 use App\Models\Lesson;
 use App\Models\CourseUser;
 use App\Models\Enrollment;
@@ -70,7 +71,7 @@ class CourseService
      */
     public function index($data)
     {
-        $query = Course::query();
+        $query = Course::query()->orderBy('created_at', 'desc');
         if (!empty($data['search'])) {
             $query = $query->search($data['search']);
         }
@@ -104,9 +105,9 @@ class CourseService
         $currentLesson = new \stdClass();
         $questions = array();
         // $courses = $query->courses();
-        $lessons = $course->lessons()->select('id', 'title', 'sortOrder')->get();
+        $lessons = $course->lessons()->select('id', 'title', 'sortOrder')->orderBy('sortOrder', 'asc')->get();
         if (!empty($query['lesson_id'])) {
-            $currentLesson = $course->lessons()->where('id', $query['lesson_id'])->first();
+            $currentLesson = $course->lessons()->with('materials')->where('id', $query['lesson_id'])->first();
 
             if ($currentLesson->content_type == 'quiz') {
                 $questions =  Question::with('options')->where('lesson_id', $currentLesson->id)->get();
@@ -119,22 +120,26 @@ class CourseService
 
         $prevLesson = $course->lessons()
             ->whereIn('id', $completedLessons)
-            ->orderBy('id', 'desc')
+            ->orderBy('sortOrder', 'desc')
             ->first();
 
         $nextLesson = $course->lessons()
             ->whereNotIn('id', $completedLessons)
-            ->orderBy('id', 'asc')
+            ->orderBy('sortOrder', 'asc')
             ->first();
+
+        $course_progress = auth()->user()->courses->where('id', $course->id)->first();
+
 
         return [
             'lessons' => $lessons,
             'course' => $course,
             'lesson' => $currentLesson,
             'completed_lessons' => $completedLessons,
-            'completed_prev' => !$prevLesson || in_array($prevLesson->id, $completedLessons),
-            'next_id' => $nextLesson->id,
-            'questions' => $questions
+            'completed_prev' => !$prevLesson ? false : true || in_array($prevLesson->id, $completedLessons),
+            'next_id' => $nextLesson ? $nextLesson->id : null,
+            'questions' => $questions,
+            'course_progress' => $course_progress
         ];
     }
 
@@ -176,24 +181,30 @@ class CourseService
      */
     public function enroll($data)
     {
-        $course = Course::findOrFail($data['course_id'])->first();
+        $course = Course::findOrFail($data['course_id']);
         $data['user_id'] = auth()->id();
 
-        if ($course) {
-            if ($course->price == 0) {
-                $record = $this->storeData($data, $course);
-                return $record->fresh();
-            } else {
-                $isVerified =  $this->verifyPayment();
-                if ($isVerified) {
+        $hasEnrolled = Enrollment::where('user_id', auth()->id())->where('course_id', $data['course_id'])->first();
+
+        if ($hasEnrolled) {
+            return $hasEnrolled;
+        } else {
+            if ($course) {
+                if ($course->price == 0) {
                     $record = $this->storeData($data, $course);
                     return $record->fresh();
                 } else {
-                    return null;
+                    $isVerified =  $this->verifyPayment();
+                    if ($isVerified) {
+                        $record = $this->storeData($data, $course);
+                        return $record->fresh();
+                    } else {
+                        return null;
+                    }
                 }
+            } else {
+                return null;
             }
-        } else {
-            return null;
         }
     }
 
@@ -258,6 +269,18 @@ class CourseService
         } else {
             return false;
         }
+    }
+
+
+    public function certificate()
+    {
+        $data = [
+            'firstname' => 'Emmanuel ',
+            'lastname' => 'Taiwo',
+            'year' => 2023
+        ];
+        $pdf = Pdf::loadView('pdf.certificate', $data);
+        return $pdf->download('invoice.pdf');
     }
 
     /**

@@ -68,8 +68,22 @@ export default class CourseService extends ModelService {
         return this.get(path, {});
     }
 
+    public getLessonMaterials(params, id) {
+        let path = `/course/${id}/materials`;
+        let query = new URLSearchParams(params).toString();
+        if (query) {
+            path += "?" + query;
+        }
+        return this.get(path, {});
+    }
+
     public handleCreateQuestion(elem, form) {
         this.url = `/course/${form.lesson_id}/questions`;
+        return this.handleCreate(elem, form);
+    }
+
+    public handleCreateMaterial(elem, form) {
+        this.url = `/course/${form.lesson_id}/materials`;
         return this.handleCreate(elem, form);
     }
 
@@ -84,5 +98,15 @@ export default class CourseService extends ModelService {
 
     public submitQuiz(quiz_id, answers) {
         return this.post(`/course/quiz/submit`, { quiz_id, answers });
+    }
+
+    public getQuiz(lesson_id) {
+        let path = "/course/quiz/" + lesson_id;
+        return this.get(path);
+    }
+
+    public markCompleted(lesson_id) {
+        let path = "/course/lesson/completed/" + lesson_id;
+        return this.patch(path, {});
     }
 }

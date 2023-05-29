@@ -70,6 +70,11 @@ class QuizController extends Controller
     }
 
 
+    public function getLQuiz($lesson_id)
+    {
+        return $this->quizService->lessonQuiz($lesson_id);
+    }
+
     /**
      * Update the specified resource in storage.
      */

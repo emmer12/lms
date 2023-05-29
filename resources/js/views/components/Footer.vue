@@ -1,13 +1,15 @@
 <template>
     <footer>
         <div class="container-x">
-            <div class="wrapper flex">
+            <div class="wrapper flex flex-wrap">
                 <div class="flex-1 details">
-                    <div class="flex gap-10">
+                    <div class="flex gap-10 flex-wrap">
                         <div class="flex-1">
-                            <img src="" alt="" />
-                            <p>© Copyright RCCG E 2022</p>
-                            <p>(480) 555-0103</p>
+                            <!-- <img src="" alt="" /> -->
+                            <img class="mt-4" src="/assets/images/logo.png" />
+
+                            <!-- <p>© Copyright RCCG E 2022</p> -->
+                            <p class="mt-3">(480) 555-0103</p>
                             <p>4517 Washington Ave.</p>
                             <p>finsweet@example.com</p>
                         </div>
@@ -182,6 +184,19 @@ footer {
 
     .heading {
         color: #fff;
+    }
+}
+
+@media (max-width: 640px) {
+    footer {
+        .sub {
+            padding-left: 0px;
+
+            h2 {
+                font-size: 20px;
+                line-height: 32px;
+            }
+        }
     }
 }
 </style>

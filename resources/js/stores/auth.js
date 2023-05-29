@@ -45,7 +45,8 @@ export const useAuthStore = defineStore("auth", {
             const alertStore = useAlertStore();
             try {
                 const response = await authService.registerUser(payload);
-                await router.push("/panel/dashboard");
+                await router.push(`/email-verify?email=${payload.email}`);
+                // await router.push("/panel/dashboard");
                 alertStore.clear();
             } catch (error) {
                 alertStore.error(getResponseError(error));
@@ -92,12 +93,11 @@ export const useAuthStore = defineStore("auth", {
                 return authService
                     .logout()
                     .then((response) => {
-                        this.clearBrowserData();
-                        this.user = null;
                         if (router.currentRoute.name !== "login") {
                             router.push({ path: "/login" });
-                            console.log("logout...");
                         }
+                        this.user = null;
+                        this.clearBrowserData();
                         resolve(response);
                     })
                     .catch((err) => {

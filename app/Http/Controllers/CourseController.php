@@ -102,6 +102,12 @@ class CourseController extends Controller
         return $this->responseDataSuccess($model);
     }
 
+    public function certificate()
+    {
+        $pdf = $this->courseService->certificate();
+        return $this->responseDataSuccess($pdf);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -4,6 +4,7 @@ namespace App\Services\Course;
 
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\QuestionResource;
+use App\Http\Resources\QuizResource;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Question;
@@ -11,7 +12,7 @@ use App\Models\Question_Option;
 use App\Models\QuestionOption;
 use App\Models\Quiz;
 use App\Models\QuizLog;
-use App\Services\Media\MediaService;
+use App\Services\Course\LessonService;
 use App\Traits\Filterable;
 use App\Utilities\Data;
 use Bouncer;
@@ -26,10 +27,18 @@ class QuizService
 {
 
     /**
+     * The service instance
+     * @var LessonService
+     */
+    protected $lessonService;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->lessonService = new LessonService();
     }
 
 
@@ -92,7 +101,7 @@ class QuizService
      */
     public function start($data)
     {
-        $quiz = Quiz::where('lesson_id', $data['lesson_id'])->first();
+        $quiz = Quiz::with('log')->where('lesson_id', $data['lesson_id'])->where('user_id', auth()->id())->first();
 
         if ($quiz) {
             return
@@ -123,12 +132,10 @@ class QuizService
         $questions = Question::with('options')->where('lesson_id', $quiz->lesson_id);
         $questions_ids = $questions->pluck('id')->toArray();
 
-
-
-
         $attempts = json_decode($data['answers'], true);
         $num_attempt = 0;
         $num_correct = 0;
+
 
         $question_answers = QuestionOption::whereIn('question_id', $questions_ids)
             ->where('is_correct', 1)
@@ -158,8 +165,6 @@ class QuizService
             return $question['choice'];
         });
 
-
-
         $week = date('W-Y');
         $newQuizLog = QuizLog::query()->create([
             "quiz_week" => $week,
@@ -173,11 +178,27 @@ class QuizService
             "num_correct" => $num_correct,
             "score" => $num_correct,
             "exam_date" => time()
-
         ]);
+
+        $percent_score = round(($num_correct / count($questions_ids)) * 100);
+
+        if ($percent_score >= config('app.pass_percent')) {
+            $this->lessonService->completed($quiz->lesson_id);
+        }
+
 
         return
             $newQuizLog->refresh(); // ;
+    }
+
+
+
+    public function lessonQuiz($lesson_id)
+    {
+        $quiz = Quiz::with(['log' => function ($query) {
+            $query->where('user_id', auth()->id());
+        }])->where('lesson_id', $lesson_id)->where('user_id', auth()->id())->firstOrFail();
+        return new QuizResource($quiz);
     }
 
 

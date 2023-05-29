@@ -201,7 +201,7 @@ export default defineComponent({
                     to: toUrl("/course/list"),
                 },
                 {
-                    name: "Lesson",
+                    name: "Lessons",
                     to: toUrl(`/course/${route.params.courseId}/lessons`),
                 },
                 {
@@ -275,8 +275,11 @@ export default defineComponent({
                 .handleCreateQuestion("create_question", reduceProperties(form))
                 .then(() => {
                     router.push({
-                        name: "course.lesson.list",
-                        params: { id: route.params.id },
+                        name: "course.lesson.question.list",
+                        params: {
+                            id: route.params.id,
+                            courseId: route.params.courseId,
+                        },
                     });
                     // clearObject(form);
                 });

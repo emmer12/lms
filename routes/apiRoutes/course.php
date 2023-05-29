@@ -4,6 +4,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\MaterialController;
 
 Route::get('/course-all', [CourseController::class, 'index']);
 Route::get('/course-all/{slug}', [CourseController::class, 'showBySlug']);
@@ -29,9 +30,19 @@ Route::middleware(['auth:sanctum', 'apply_locale'])->group(
         Route::patch('course/{question}/question', [QuizController::class, 'update']);
         Route::delete('course/question/{question}', [QuizController::class, 'delete']);
 
+        // Material
+        Route::get('course/{lesson}/materials', [MaterialController::class, 'materials']);
+        Route::post('course/{lesson}/materials', [MaterialController::class, 'storeMaterial']);
+        Route::patch('course/{material}/question', [MaterialController::class, 'update']);
+        Route::delete('course/material/{material}', [MaterialController::class, 'delete']);
 
         Route::post('course/quiz/start', [QuizController::class, 'start']);
         Route::post('course/quiz/restart', [QuizController::class, 'reStart']);
         Route::post('course/quiz/submit', [QuizController::class, 'submit']);
+        Route::get('course/quiz/{lesson_id}', [QuizController::class, 'getLQuiz']);
+
+        Route::patch('course/lesson/completed/{lesson}', [LessonController::class, 'completed']);
+
+        Route::get('/course/download-certificate', [CourseController::class, 'certificate']);
     }
 );

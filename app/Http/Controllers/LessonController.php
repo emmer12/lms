@@ -59,6 +59,15 @@ class LessonController extends Controller
         }
     }
 
+    public function completed(Lesson $lesson)
+    {
+        if ($record = $this->lessonService->completed($lesson->id)) {
+            return $this->responseStoreSuccess(['record' => $record]);
+        } else {
+            return $this->responseUpdateFail();
+        }
+    }
+
     /**
      * Display the specified resource.
      * @param Lesson $lesson

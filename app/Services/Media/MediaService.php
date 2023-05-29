@@ -36,6 +36,19 @@ class MediaService
         return  $path;
     }
 
+    /**
+     * Handles a file upload to the storage
+     * @param  UploadedFile  $file
+     * @param  Course|Model  $course
+     * @return string
+     */
+    public function storeFile(UploadedFile $file, $disk, $dir)
+    {
+        $name = $file->hashName();
+        $key = "{$dir}/{$name}";
+        $path = $file->storeAs($dir, $name, ['disk' => $disk]);
+        return  $path;
+    }
 
 
     /**

@@ -16,7 +16,15 @@
                     <Spinner :text-new-line="true"></Spinner>
                 </template>
                 <template v-else>
-                    {{ trans("global.phrases.no_records") }}
+                    <div class="mb-5">
+                        {{ trans("global.phrases.no_records") }}
+                    </div>
+
+                    <Button
+                        label="Enroll for Courses"
+                        size="sm"
+                        to="/courses"
+                    />
                 </template>
             </div>
         </template>

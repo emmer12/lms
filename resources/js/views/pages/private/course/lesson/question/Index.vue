@@ -105,15 +105,15 @@ export default defineComponent({
         });
 
         const page = reactive({
-            id: "list_lessons",
-            title: "Lessons",
+            id: "list_questions",
+            title: "Questions",
             breadcrumbs: [
                 {
                     name: "Courses",
                     to: toUrl("/course/list"),
                 },
                 {
-                    name: "Lesson",
+                    name: "Lessons",
                     to: toUrl(`/course/${route.params.courseId}/lessons`),
                 },
                 {

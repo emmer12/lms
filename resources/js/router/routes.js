@@ -3,6 +3,7 @@ import { default as PageCourses } from "@/views/pages/shared/Courses";
 import { default as PageCourseDetails } from "@/views/pages/shared/CourseDetails";
 
 import { default as PageLogin } from "@/views/pages/auth/login/Main";
+import { default as PageVerify } from "@/views/pages/auth/verify/Main";
 import { default as PageRegister } from "@/views/pages/auth/register/Main";
 import { default as PageResetPassword } from "@/views/pages/auth/reset-password/Main";
 import { default as PageForgotPassword } from "@/views/pages/auth/forgot-password/Main";
@@ -23,6 +24,8 @@ import { default as PageLessonCreate } from "@/views/pages/private/course/lesson
 import { default as PageLessons } from "@/views/pages/private/course/lesson/Index";
 import { default as PageLessonsQuestionCreate } from "@/views/pages/private/course/lesson/question/Create";
 import { default as PageLessonsQuestionList } from "@/views/pages/private/course/lesson/question/Index";
+import { default as PageLessonsMaterialCreate } from "@/views/pages/private/course/lesson/material/Create";
+import { default as PageLessonsMaterialList } from "@/views/pages/private/course/lesson/material/Index";
 
 import { default as PageLearningMain } from "@/views/pages/private/course/learning/PageLearningMain";
 import { default as PageLearning } from "@/views/pages/private/course/learning/PageLearning";
@@ -53,20 +56,16 @@ const routes = [
         path: "/my/learning/:id",
         component: PageLearningMain,
         meta: { requiresAuth: true },
-    },
-    {
-        name: "course.learning",
-        path: "/courses/learning",
-        component: PageLearningMain,
         children: [
             {
-                name: "learning.",
-                path: ":slug",
+                name: "my.learning.lesson",
+                path: ":lesson_id",
                 meta: { requiresAuth: true },
                 component: PageLearning,
             },
         ],
     },
+
     {
         name: "panel",
         path: "/panel",
@@ -187,6 +186,24 @@ const routes = [
                         },
                         component: PageLessonsQuestionList,
                     },
+                    {
+                        name: "course.lesson.material.create",
+                        path: ":courseId/lesson/:id/material/create",
+                        meta: {
+                            requiresAuth: true,
+                            requiresAbility: abilities.VIEW_LESSON,
+                        },
+                        component: PageLessonsMaterialCreate,
+                    },
+                    {
+                        name: "course.lesson.material.list",
+                        path: ":courseId/lesson/:id/material/list",
+                        meta: {
+                            requiresAuth: true,
+                            requiresAbility: abilities.VIEW_LESSON,
+                        },
+                        component: PageLessonsMaterialList,
+                    },
                 ],
             },
         ],
@@ -196,6 +213,12 @@ const routes = [
         name: "login",
         meta: { requiresAuth: false },
         component: PageLogin,
+    },
+    {
+        path: "/email-verify",
+        name: "email.verify",
+        meta: { requiresAuth: false },
+        component: PageVerify,
     },
     {
         path: "/register",

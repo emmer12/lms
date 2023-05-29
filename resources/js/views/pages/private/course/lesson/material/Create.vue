@@ -6,7 +6,7 @@
         @action="onAction"
     >
         <Panel>
-            <Form id="create-user" @submit.prevent="onSubmit">
+            <Form id="create-question" @submit.prevent="onSubmit">
                 <TextInput
                     class="mb-4"
                     type="text"
@@ -15,66 +15,60 @@
                     v-model="form.title"
                     :label="trans('Title')"
                 />
-                <div class="mb-3">
-                    <label for="description" class="text-sm text-gray-500">
-                        Description</label
+                <div class="mb-4">
+                    <label for="content_type" class="text-sm text-gray-500">
+                        Content Type</label
                     >
-                    <ckeditor
-                        id="description"
-                        :editor="editor"
-                        v-model="form.description"
-                        :config="editorConfig"
-                    ></ckeditor>
-
-                    <div v-html="form.description"></div>
-                    <div>{{ form.description }}</div>
-                </div>
-                <TextInput
-                    class="mb-4"
-                    type="number"
-                    :required="true"
-                    name="price"
-                    v-model="form.price"
-                    :label="trans('Price')"
-                />
-                <TextInput
-                    class="mb-4"
-                    type="text"
-                    name="duration"
-                    v-model="form.duration"
-                    :label="trans('Duration')"
-                />
-                <FileInput
-                    class="mb-4"
-                    name="preview"
-                    v-model="form.preview"
-                    accept="image/*"
-                    :label="trans('Preview')"
-                    @click="form.preview = ''"
-                ></FileInput>
-
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input
-                        type="checkbox"
-                        v-model="form.featured"
-                        value=""
-                        class="sr-only peer"
+                    <multiselect
+                        name="content_type"
+                        v-model="form.content_type"
+                        :options="['video', 'doc', 'audio']"
                     />
-                    <div
-                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-theme-600"
-                    ></div>
-                    <span
-                        class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >Featured Course</span
+                </div>
+
+                <div
+                    class="mb-4"
+                    v-if="
+                        form.content_type == 'video' ||
+                        form.content_type == 'audio'
+                    "
+                >
+                    <label for="source" class="text-sm text-gray-500">
+                        Source</label
                     >
-                </label>
+                    <multiselect
+                        name="source"
+                        v-model="form.source"
+                        :options="['embed', 'upload']"
+                    />
+                </div>
+
+                <div class="mb-4" v-if="form.source == 'embed'">
+                    <TextInput
+                        class="mb-4"
+                        type="textarea"
+                        :required="true"
+                        name="code"
+                        v-model="form.embed_code"
+                        :label="trans('Embed Code')"
+                    />
+                </div>
+                <div v-else>
+                    <FileInput
+                        class="mb-4"
+                        name="file"
+                        v-model="form.file"
+                        :label="trans('Upload File')"
+                        @click="form.file = ''"
+                    ></FileInput>
+                </div>
             </Form>
         </Panel>
     </Page>
 </template>
 
 <script>
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { trans } from "@/helpers/i18n";
 import { useAuthStore } from "@/stores/auth";
 import Button from "@/views/components/input/Button";
@@ -89,7 +83,10 @@ import { clearObject, reduceProperties } from "@/helpers/data";
 import { toUrl } from "@/helpers/routing";
 import Form from "@/views/components/Form";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import Multiselect from "vue-multiselect";
+import Modal from "@/views/components/Modal";
+
 export default defineComponent({
     components: {
         Form,
@@ -100,26 +97,26 @@ export default defineComponent({
         TextInput,
         Button,
         Page,
+        Multiselect,
+        Modal,
     },
     setup() {
         const { user } = useAuthStore();
         const router = useRouter();
+        const route = useRoute();
         const form = reactive({
-            title: "",
-            description: "",
-            price: "",
-            duration: "",
-            price: 0,
-            preview: "",
-            featured: 0,
+            content_type: "",
+            source: "",
         });
+
+        const isAvatarModalShowing = ref(false);
 
         const editorConfig = reactive({});
         const editor = reactive(ClassicEditor);
 
         const page = reactive({
-            id: "create_courses",
-            title: trans("New Course"),
+            id: "create_materials",
+            title: trans("New Material"),
             filters: false,
             breadcrumbs: [
                 {
@@ -127,7 +124,11 @@ export default defineComponent({
                     to: toUrl("/course/list"),
                 },
                 {
-                    name: trans("New Course"),
+                    name: "Lessons",
+                    to: toUrl(`/course/${route.params.courseId}/lessons`),
+                },
+                {
+                    name: trans("Create"),
                     active: true,
                 },
             ],
@@ -136,7 +137,9 @@ export default defineComponent({
                     id: "back",
                     name: trans("Back"),
                     icon: "fa fa-angle-left",
-                    to: toUrl("/course/list"),
+                    to: toUrl(
+                        `course/${route.params.courseId}/lesson/${route.params.id}/question/list`
+                    ),
                     theme: "outline",
                 },
                 {
@@ -159,10 +162,17 @@ export default defineComponent({
         }
 
         function onSubmit() {
+            form.lesson_id = route.params.id;
             service
-                .handleCreate("create_courses", reduceProperties(form))
+                .handleCreateMaterial("create_material", reduceProperties(form))
                 .then(() => {
-                    router.push({ name: "course.list" });
+                    router.push({
+                        name: "course.lesson.material.list",
+                        params: {
+                            id: route.params.id,
+                            courseId: route.params.courseId,
+                        },
+                    });
                     // clearObject(form);
                 });
             return false;
@@ -177,13 +187,14 @@ export default defineComponent({
             onAction,
             editorConfig,
             editor,
+            isAvatarModalShowing,
         };
     },
 });
 </script>
 
-<style>
-.ck-editor__editable {
-    height: 200px !important;
+<style lang="scss" scoped>
+.fa {
+    font-size: 20px;
 }
 </style>

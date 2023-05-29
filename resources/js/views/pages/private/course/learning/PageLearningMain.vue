@@ -34,7 +34,29 @@
                 </svg>
             </div>
             <div class="sidebar" :class="{ closed: !open }">
-                <div class="top"></div>
+                <div class="top flex">
+                    <div class="flex items-center w-full p-5 gap-3">
+                        <input
+                            placeholder="Search Course content"
+                            type="search"
+                            class="s-input flex-1 bg-transparent"
+                        />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-6 h-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                            />
+                        </svg>
+                    </div>
+                </div>
                 <div class="body">
                     <div v-if="results.lessons.length && !results.loading">
                         <LessonList
@@ -46,6 +68,14 @@
                             :completed="results.completed"
                             :next_id="results.next_id"
                             :currentLesson="currentLesson"
+                        />
+                        <LessonList
+                            :lesson="lesson"
+                            type="certificate"
+                            :certificate_eligible="
+                                results?.course_progress?.pivot
+                                    ?.certificate_eligible
+                            "
                         />
                     </div>
                     <div v-else>
@@ -63,21 +93,13 @@
                 </div>
             </div>
             <div class="main">
-                <div v-if="currentLesson?.content_type == 'quiz'">
-                    <QuizComponent
-                        :questions="results?.questions"
-                        :course_id="currentLesson?.course_id"
-                        :lesson_id="currentLesson?.id"
-                        :duration="currentLesson?.quiz_duration"
-                    />
+                <div
+                    class="course-overview"
+                    v-if="$route.name == 'my.learning'"
+                >
+                    <div class="ck" v-html="results?.course?.description"></div>
                 </div>
-                <div class="content-con">
-                    <div
-                        v-if="currentLesson"
-                        v-html="currentLesson.description"
-                    ></div>
-                    <div v-else v-html="results?.course?.description"></div>
-                </div>
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -94,6 +116,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useAlertStore } from "@/stores/alert";
 import Spinner from "@/views/components/icons/Spinner";
 import QuizComponent from "@/views/components/QuizComponent";
+import { useBus } from "@/hooks";
 
 export default {
     components: {
@@ -108,8 +131,9 @@ export default {
         const alertStore = useAlertStore();
         const route = useRoute();
         const router = useRouter();
+        const { bus } = useBus();
         const results = reactive({
-            courses: null,
+            course: null,
             lesson: null,
             lessons: [],
             completed: [],
@@ -147,6 +171,7 @@ export default {
                     results.completed_prev = response.data.completed_prev;
                     results.questions = response.data.questions;
                     results.next_id = response.data.next_id;
+                    results.course_progress = response.data.course_progress;
                     results.loading = false;
                     results.fetching = false;
 
@@ -160,12 +185,30 @@ export default {
                 });
         }
 
-        watch(mainQuery, (newTableState) => {
-            fetchPage(mainQuery);
+        const isMobile = () => {
+            if (
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        watch(route.name, (newTableState) => {
+            if (isMobile) {
+                setOpen();
+            }
         });
 
         onMounted(() => {
             fetchPage();
+
+            bus.on("lesson_completed", () => {
+                fetchPage();
+            });
         });
 
         function setActive(val) {
@@ -238,6 +281,11 @@ export default {
 
         .top {
             height: 100px;
+
+            input {
+                border: none;
+                outline: none;
+            }
         }
 
         .body {
@@ -254,9 +302,10 @@ export default {
         margin: 70px 0px 50px 0px;
         flex: 1;
         padding: 10px;
-        padding-left: 15px;
+        padding-left: 50px;
         background: #fff;
         padding-right: 15px;
+        height: calc(100vh - 70px);
 
         .content-con {
             width: 640px;
@@ -291,6 +340,23 @@ export default {
             svg {
                 rotate: 180deg;
             }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .learning-wrapper {
+        .main {
+            margin: 50px 0px 20px 0px;
+            padding: 10px;
+            padding-left: 15px;
+        }
+
+        .sidebar {
+            flex: 0 0 95%;
+        }
+        .toggle {
+            left: 90%;
         }
     }
 }

@@ -20,7 +20,8 @@
             locales: {
                 en: {!! json_encode(\Illuminate\Support\Facades\Lang::get('frontend', [], 'en')) !!},
                 mk: {!! json_encode(\Illuminate\Support\Facades\Lang::get('frontend', [], 'mk')) !!},
-            }
+            },
+            course_pass_percent: '{{ config('app.pass_percent') }}'
         }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">

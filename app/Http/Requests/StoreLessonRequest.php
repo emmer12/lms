@@ -21,7 +21,10 @@ class StoreLessonRequest extends FormRequest
             'sortOrder'   => 'required|numeric',
             'article_body'   => 'sometimes|string',
             'course_id'   => 'sometimes|string',
+            'quiz_duration'   => 'sometimes',
+            'quiz_type'   => 'sometimes',
             'preview'   => 'nullable|image|max:10240',
+
         ];
     }
 }

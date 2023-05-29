@@ -35,11 +35,14 @@
 
             <div class="py-10">
                 <div class="container-x">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center my-3">
                         <span>Showing 1 - 6 OF 15 Results</span>
-                        <span>
-                            <input type="search" />
-                        </span>
+                        <div>
+                            <input
+                                type="search"
+                                class="block w-full sm:w-64 px-3 py-3 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-theme-500 focus:border-theme-500 text-sm"
+                            />
+                        </div>
                     </div>
 
                     <div

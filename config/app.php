@@ -143,6 +143,10 @@ return [
         // 'store'  => 'redis',
     ],
 
+
+    'pass_percent' => 70,
+
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

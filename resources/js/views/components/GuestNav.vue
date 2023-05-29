@@ -43,17 +43,62 @@
                                 to="/login"
                                 label="Login/Register"
                             />
-                            <div class="avatar" v-else>
-                                <img
-                                    v-if="user.avatar_url"
-                                    :src="user.avatar_url"
-                                    alt="Avatar"
-                                />
-                                <img
-                                    v-else
-                                    :src="`https://eu.ui-avatars.com/api/?name=${user.full_name}&size=50`"
-                                    alt="Avatar"
-                                />
+                            <div class="avatar relative" v-else>
+                                <div
+                                    class="cursor-pointer flex"
+                                    @click="
+                                        state.isAccountDropdownOpen =
+                                            !state.isAccountDropdownOpen
+                                    "
+                                >
+                                    <img
+                                        v-if="user.avatar_url"
+                                        :src="user.avatar_url"
+                                        alt="Avatar"
+                                    />
+                                    <img
+                                        v-else
+                                        :src="`https://eu.ui-avatars.com/api/?name=${user.full_name}&size=50`"
+                                        alt="Avatar"
+                                    />
+
+                                    <span class="relative pt-3 mr-2 ml-2">
+                                        <Icon
+                                            :name="
+                                                state.isAccountDropdownOpen
+                                                    ? 'angle-up'
+                                                    : 'angle-down'
+                                            "
+                                    /></span>
+                                </div>
+
+                                <div
+                                    v-if="state.isAccountDropdownOpen"
+                                    class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
+                                >
+                                    <router-link
+                                        to="/panel"
+                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                    >
+                                        {{ trans("Dashboard") }}
+                                    </router-link>
+
+                                    <router-link
+                                        to="/panel/my-courses"
+                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                    >
+                                        {{ trans("My Courses") }}
+                                    </router-link>
+
+                                    <a
+                                        href="#"
+                                        @click.prevent="onLogout"
+                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                        >{{
+                                            trans("global.phrases.sign_out")
+                                        }}</a
+                                    >
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -64,16 +109,19 @@
 </template>
 
 <script>
+import { trans } from "@/helpers/i18n";
 import Button from "@/views/components/input/Button";
 import { reactive } from "vue";
+import Icon from "@/views/components/icons/Icon";
 import { useAuthStore } from "@/stores/auth";
 
 export default {
     components: {
         Button,
+        Icon,
     },
     setup() {
-        const { user, loggedIn } = useAuthStore();
+        const { user, loggedIn, logout } = useAuthStore();
 
         const state = reactive({
             isAccountDropdownOpen: false,
@@ -82,10 +130,16 @@ export default {
             app: window.AppConfig,
         });
 
+        function onLogout() {
+            logout();
+        }
+
         return {
             state,
             user,
             loggedIn,
+            onLogout,
+            trans,
         };
     },
 };
@@ -99,6 +153,7 @@ export default {
         display: flex;
         height: 80px;
         color: #231f40;
+        align-items: center;
 
         justify-content: space-between;
         .menu {
@@ -154,6 +209,17 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .navigation {
+        .wrapper {
+            .menu {
+                display: none;
+                /* flex: 1; */
+            }
+        }
     }
 }
 </style>

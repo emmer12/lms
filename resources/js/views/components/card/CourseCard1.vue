@@ -2,7 +2,10 @@
     <div class="contain">
         <div class="wrapper">
             <div class="display">
-                <img src="/assets/images/course2.jpg" alt="" />
+                <img
+                    src="/assets/images/no-preview.jpg"
+                    alt="Display Thumbnail"
+                />
             </div>
             <div class="content">
                 <div class="flex my-3">

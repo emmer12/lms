@@ -76,7 +76,40 @@
                     />
                 </div>
 
-                <div class="mb-4">
+                <div v-if="form.content_type.value == 'quiz'">
+                    <div class="mb-4">
+                        <label for="quiz_type" class="text-sm text-gray-500">
+                            Quiz Type</label
+                        >
+                        <multiselect
+                            name="quiz_type"
+                            track-by="label"
+                            v-model="form.quiz_type"
+                            label="label"
+                            :options="[
+                                {
+                                    value: 'test',
+                                    label: 'Test',
+                                },
+                                {
+                                    value: 'exam',
+                                    label: 'Exam',
+                                },
+                            ]"
+                        />
+                    </div>
+                    <TextInput
+                        class="mb-4"
+                        type="number"
+                        name="quiz_duration"
+                        v-model="form.quiz_duration"
+                        :label="trans('Quiz duration')"
+                        placeholder="Enter duration in minutes"
+                    />
+                    <span></span>
+                </div>
+
+                <div class="mb-4" v-if="form.content_type.value == 'article'">
                     <label for="article-body" class="text-sm text-gray-500">
                         Article Body</label
                     >
@@ -196,6 +229,7 @@ export default defineComponent({
         function onSubmit() {
             form.course_id = route.params.id;
             form.content_type = form.content_type.value;
+            form.quiz_type = form.quiz_type ? form.quiz_type.value : "";
             service
                 .handleCreateLesson("create_lesson", reduceProperties(form))
                 .then(() => {
@@ -205,7 +239,7 @@ export default defineComponent({
                     });
                     // clearObject(form);
                 });
-            course / 9 / lessons;
+
             return false;
         }
 

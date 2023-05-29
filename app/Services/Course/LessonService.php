@@ -5,6 +5,8 @@ namespace App\Services\Course;
 use App\Http\Resources\LessonResource;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\CourseUser;
+use App\Models\CourseUserLesson;
 use App\Models\Lesson;
 use App\Services\Media\MediaService;
 use App\Traits\Filterable;
@@ -135,6 +137,48 @@ class LessonService
     public function delete(User $user)
     {
         return $user->delete();
+    }
+
+
+    /**
+     * Deletes resource in the database
+     * @param  int
+     * @return bool
+     */
+
+    public function completed($id)
+    {
+        $isCompleted = CourseUserLesson::where('lesson_id', $id)->where('user_id', auth()->id())->where('completed', true)->first();
+
+        if ($isCompleted) {
+            return $isCompleted;
+        } else {
+            $course = CourseUserLesson::where('lesson_id', $id);
+            $course->update(['completed' => 1]);
+
+            $points = $this->getCoursePoint($course->first()->course_id);
+            $cu = CourseUser::where('course_id', $course->first()->course_id)->where('user_id', auth()->id())->first();
+            $totalPoint = $cu->progress + $points;
+            $certificate_eligible = false;
+            if ($totalPoint >= 95) {
+                $certificate_eligible = true;
+            }
+
+            CourseUser::where('course_id',  $cu->course_id)->where('user_id', auth()->id())->update([
+                'progress' => $totalPoint,
+                "certificate_eligible" => $certificate_eligible
+            ]);
+        }
+
+        return $points;
+    }
+
+    private function getCoursePoint($course_id)
+    {
+        $lessons = Lesson::where('course_id', $course_id)->get();
+        $totalLesson = floor(100 / count($lessons));
+
+        return $totalLesson;
     }
 
     /**

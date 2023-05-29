@@ -103,7 +103,11 @@
                                 v-if="authStore.user.avatar_url"
                                 :src="authStore.user.avatar_url"
                             />
-                            <AvatarIcon v-else />
+                            <img
+                                v-else
+                                :src="`https://eu.ui-avatars.com/api/?name=${authStore.user.full_name}&size=50`"
+                                alt="Avatar"
+                            />
                         </button>
                     </a>
                     <button
@@ -111,7 +115,7 @@
                         @click="state.isAccountDropdownOpen = false"
                         class="h-full w-full fixed inset-0 cursor-pointer"
                     ></button>
-                    <span class="relative pt-3 mr-2">
+                    <span class="relative pt-3 mr-2 ml-2">
                         <!-- {{ authStore.user.full_name }} -->
                         <Icon
                             :name="
@@ -194,7 +198,9 @@
             !$route.path.includes('panel')
         "
     >
-        <GuestNav v-if="!['my.learning'].includes($route.name)" />
+        <GuestNav
+            v-if="!['my.learning', 'my.learning.lesson'].includes($route.name)"
+        />
         <!-- <LearningNav v-else /> -->
         <router-view />
     </div>
@@ -298,7 +304,7 @@ export default {
                 },
                 {
                     name: trans("Courses"),
-                    icon: "users",
+                    icon: "book",
                     showDesktop: true,
                     showMobile: true,
                     requiresAbility: getAbilitiesForRoute(["*"]),
