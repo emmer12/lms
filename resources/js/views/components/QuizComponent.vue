@@ -49,12 +49,16 @@
                         <div class="action flex gap-4 justify-center">
                             <Button @click="retake" size="md" label="Retake" />
                             <Button
-                                v-if="canNext()"
+                                v-if="
+                                    canNext() &&
+                                    currentLesson.quiz_type !== 'exam'
+                                "
                                 size="md"
                                 label="Next Lesson"
                                 iconRight="fa fa-angle-right"
                                 @click="nextLesson"
                             />
+                            <Button v-else label="Next Certificate" />
                         </div>
                     </div>
                 </div>

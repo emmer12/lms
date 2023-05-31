@@ -18,13 +18,14 @@
                                     <i class="fa fa-home mr-3"></i>
                                     Home
                                 </router-link>
+                                <i class="fa fa-angle-right mx-1"></i>
                             </li>
                             <li class="inline-flex items-center">
                                 <router-link
                                     to="/courses"
                                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                                 >
-                                    <i class="fa fa-list-alt mr-3"></i>
+                                    <i class="fa fa-book mr-3"></i>
                                     courses
                                 </router-link>
                             </li>
@@ -44,7 +45,9 @@
 
             <div class="py-2 pb-10">
                 <div class="container-x">
-                    <div class="flex gap-10 course-details">
+                    <div
+                        class="flex flex-col sm:flex-row gap-10 course-details"
+                    >
                         <div class="flex-1">
                             <div class="title mb-4">
                                 <h2>
@@ -559,7 +562,7 @@ export default {
 }
 
 .course-details {
-    max-width: 90%;
+    max-width: 100%;
     margin: auto;
 
     .title {
@@ -572,6 +575,7 @@ export default {
     }
     .side-con {
         width: 360px;
+        max-width: 100%;
         margin-top: -50px;
         position: relative;
         z-index: 100;
@@ -664,6 +668,38 @@ export default {
                 background: #456acb;
                 transition: 0.3s;
             }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .tabs {
+        padding: 10px;
+
+        .tab {
+            height: 50px;
+
+            label {
+                font-size: 14px;
+                line-height: 50px;
+            }
+        }
+    }
+
+    .course-details {
+        .title {
+            h2 {
+                font-size: 24px;
+            }
+        }
+    }
+    .banner {
+        padding-top: 60px;
+        padding-bottom: 60px;
+
+        h2 {
+            font-size: 24px;
+            line-height: 1.4;
         }
     }
 }

@@ -7,6 +7,7 @@ import App from "@/App";
 import Button from "@/views/components/input/Button";
 import Logo from "@/views/components/Logo";
 import CourseCard1 from "@/views/components/card/CourseCard1";
+import CourseCard4 from "@/views/components/card/CourseCard4";
 import CourseCard from "@/views/components/card/CourseCard";
 import Header from "@/views/components/Header";
 import CKEditor from "@ckeditor/ckeditor5-vue";
@@ -16,6 +17,7 @@ app.component("Button", Button);
 app.component("Logo", Logo);
 app.component("CourseCard", CourseCard);
 app.component("CourseCard1", CourseCard1);
+app.component("CourseCard4", CourseCard4);
 app.component("Header", Header);
 
 app.use(CKEditor);

@@ -145,19 +145,29 @@
             </header>
 
             <!-- Mobile Header & Nav -->
-            <header class="w-full bg-theme-600 py-5 px-6 sm:hidden">
+            <header class="w-full bg-white py-4 px-6 sm:hidden">
                 <div class="flex items-center justify-between">
-                    <router-link
-                        class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
-                        to="/panel/dashboard"
-                    >
-                        {{ state.app.name }}
+                    <router-link to="/">
+                        <router-link
+                            class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
+                            to="/panel/dashboard"
+                        >
+                            <template v-if="state.app.logo">
+                                <img
+                                    :src="state.app.logo"
+                                    :alt="state.app.name"
+                                />
+                            </template>
+                            <template v-else>
+                                {{ state.app.name }}
+                            </template>
+                        </router-link>
                     </router-link>
                     <button
                         @click="
                             state.isMobileMenuOpen = !state.isMobileMenuOpen
                         "
-                        class="text-white text-3xl focus:outline-none"
+                        class="text-gray-800 text-3xl focus:outline-none"
                     >
                         <i
                             v-if="!state.isMobileMenuOpen"
@@ -171,12 +181,6 @@
                     class="flex flex-col pt-4 text-base text-white"
                 >
                     <Menu :state="state" :type="'mobile'" />
-                    <!-- <button
-                        class="w-full bg-theme-800 text-white font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:text-theme-800 hover:bg-gray-300 flex items-center justify-center"
-                    >
-                        <Icon name="paperclip" class="mr-3" />
-                        {{ trans("global.buttons.documentation") }}
-                    </button> -->
                 </nav>
             </header>
 

@@ -192,4 +192,12 @@ export default {
         color: var(--color-heading);
     }
 }
+
+@media (max-width: 640px) {
+    .banner {
+        h2 {
+            font-size: 24px;
+        }
+    }
+}
 </style>

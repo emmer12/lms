@@ -4,10 +4,8 @@
             <div class="container-x">
                 <div class="flex flex-col sm:flex-row">
                     <div class="content flex-1 w-full sm:w-fill/2">
-                        <h4 class="mb-4">Welcome KingsWord Learning Portal</h4>
-                        <h2 class="mb-8">
-                            Start Better Learning Future From Here
-                        </h2>
+                        <h4 class="mb-4 font-reey">Welcome to</h4>
+                        <h2 class="mb-8">KingsWord Learning institute</h2>
 
                         <Button
                             class="mb-4 sm:mb-16"
@@ -16,26 +14,29 @@
                         <div class="flex item-center mb-4 sm:mb-16"></div>
 
                         <p class="note">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Ad voluptate cupiditate inventore.
+                            Grow your spirit and become part of the growing
+                            supernatural armies.
                         </p>
                     </div>
                     <div class="artworks flex-1">
                         <div class="flex">
                             <div class="flex flex-col">
-                                <CourseCard1 />
+                                <div v-if="results.featured">
+                                    <CourseCard1 :course="results.featured" />
+                                </div>
                                 <div class="card work">
                                     <img
                                         src="/assets/images/a1.png"
                                         alt="Images"
                                     />
                                     <div class="info">
-                                        <h4>Design Workshop</h4>
-                                        <p>Today at 6:00am</p>
+                                        <h4>Student Signup</h4>
+                                        <p>Become a member</p>
                                     </div>
                                     <Button
                                         label="Join Now"
                                         size="sm"
+                                        to="/register"
                                         iconRight="fa fa-arrow-right"
                                     />
                                 </div>
@@ -53,45 +54,119 @@
             </div>
         </div>
 
+        <!-- Meet Out Pastors -->
+
+        <div class="our-pastor-section">
+            <div class="container-x">
+                <div class="flex flex-col sm:flex-row">
+                    <div class="img flex-1">
+                        <img src="/assets/images/img2.webp" alt="Pastor" />
+                    </div>
+                    <div class="details flex-1">
+                        <h4>KMI LEARNING PORTAL</h4>
+                        <h2>Welcome to KingsWord Learning Institute</h2>
+                        <p>
+                            Here we can have short information about the portal
+                            and the mission on the website. Here we can have
+                            short information about the portal and the mission
+                            on the website. Here we can have short information
+                            about the portal and the mission on the website.
+                        </p>
+
+                        <div class="list">
+                            <div class="flex my-3 items-center">
+                                <confirmed />
+                                <p>Get unlimited access to KTI resources</p>
+                            </div>
+                            <div class="flex my-3 items-center">
+                                <confirmed />
+                                <p>
+                                    Explore a variety of faith building
+                                    materials
+                                </p>
+                            </div>
+                            <div class="flex my-3 items-center">
+                                <confirmed />
+                                <p>
+                                    Find the best qualitfied teacher of the
+                                    gospel
+                                </p>
+                            </div>
+                            <div class="flex my-3 items-center">
+                                <confirmed />
+                                <p>
+                                    Grow in your faith, and mature in the spirit
+                                </p>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <!-- <Button label="LEARN MORE" class="block" /> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Course Sections -->
 
         <div class="course-section">
             <div class="container-x">
                 <Header
                     title="Featured On This Month"
-                    subtitle="Popular Courses"
+                    subtitle="Featured Courses"
                 />
-                <div class="courses-grid grid">
-                    <course-card-1 />
-                    <course-card-1 />
-                    <course-card-1 />
-                    <course-card-1 />
+
+                <div
+                    v-if="results.courses.length && !results.loading"
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+                >
+                    <course-card
+                        v-for="course in results.courses"
+                        :key="course.id"
+                        :course="course"
+                    />
+                </div>
+
+                <div v-else>
+                    <template v-if="results.loading">
+                        <Spinner :text-new-line="true"></Spinner>
+                    </template>
+                    <template v-else>
+                        {{ trans("global.phrases.no_records") }}
+                    </template>
                 </div>
             </div>
         </div>
 
-        <!-- Meet Out Pastors -->
-
-        <div class="out-pastor-section">
+        <div class="mission-section">
             <div class="container-x">
                 <div class="flex flex-col sm:flex-row">
-                    <div class="img flex-1">
-                        <img src="/assets/images/img1.jpg" alt="Pastor" />
-                    </div>
-                    <div class="details flex-1">
-                        <h2>
-                            Our parish <br />
-                            <span>Couch</span>
-                        </h2>
+                    <div class="left w-full sm:w-1/3">
+                        <h4>KTI Mission</h4>
+                        <h2>Our Mission is to make you grow spiritually</h2>
                         <p>
-                            Pastor Gbolahan Railey are the Lead Pastors of RCCG
-                            Church in Uk. They’ve been in pastoral ministry for
-                            over 20 years.
+                            Grow your spirit and become part of the growing
+                            supernatural armies.
                         </p>
+                    </div>
 
-                        <br />
-
-                        <!-- <Button label="LEARN MORE" class="block" /> -->
+                    <div class="right flex">
+                        <div class="box">
+                            <Teacher />
+                            <h4>20</h4>
+                            <p>Pro Teachers</p>
+                        </div>
+                        <div class="box">
+                            <OnlineCourse />
+                            <h4>50</h4>
+                            <p>Courses</p>
+                        </div>
+                        <div class="box">
+                            <Student />
+                            <h4>6,000</h4>
+                            <p>Enrolled Students</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,10 +177,54 @@
 <script>
 import Guest from "@/views/layouts/Guest";
 import AppDownload from "@/views/components/AppDownload";
+import Student from "@/views/components/icons/Student.vue";
+import Teacher from "@/views/components/icons/Teacher.vue";
+import OnlineCourse from "@/views/components/icons/OnlineCourse.vue";
+import Confirmed from "@/views/components/icons/Confirmed.vue";
+import { watch, onMounted, reactive, computed } from "vue";
+import { trans } from "@/helpers/i18n";
+import CourseService from "@/services/CourseService";
+
 export default {
     components: {
         Guest,
         AppDownload,
+        Student,
+        Teacher,
+        OnlineCourse,
+        Confirmed,
+    },
+
+    setup() {
+        const service = new CourseService();
+
+        const results = reactive({
+            courses: [],
+            featured: null,
+            loading: false,
+        });
+
+        function getPageData() {
+            service
+                .getHomePageData()
+                .then((response) => {
+                    results.courses = response.data.courses;
+                    results.featured = response.data.featured;
+                    results.loading = false;
+                })
+                .catch((error) => {
+                    results.loading = false;
+                });
+        }
+
+        onMounted(() => {
+            getPageData();
+        });
+
+        return {
+            results,
+            trans,
+        };
     },
 };
 </script>
@@ -165,23 +284,48 @@ export default {
     right: 0px;
 }
 
-.out-pastor-section {
+.our-pastor-section {
     background: #fff;
-    padding: 100px 0px;
+    padding: 100px 0px 0px 0px;
+
+    .img {
+        height: 400px;
+        width: 100%;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
     .details {
         padding: 20px 50px;
     }
 
+    h4 {
+        font-size: 20px;
+        color: #6541e6;
+        font-weight: 700;
+    }
+
     h2 {
-        font-size: 4.2em;
+        font-size: 50px;
         font-weight: 800;
-        text-transform: uppercase;
-        line-height: 64px;
+        line-height: 50px;
+        margin: 10px 0px;
     }
 
     p {
         /* font-size: 16px; */
         font-weight: 500;
+    }
+
+    .list {
+        svg {
+            height: 20px;
+            width: 20px;
+            fill: #fcad03;
+            margin-right: 15px;
+        }
     }
 }
 
@@ -211,7 +355,7 @@ export default {
 }
 
 .course-section {
-    background: #fff;
+    background: #f2f6fc;
     padding: 50px 0px;
 
     .courses-grid {
@@ -221,9 +365,75 @@ export default {
     }
 }
 
+.mission-section {
+    background-image: linear-gradient(
+            hsl(216deg 87% 27% / 70%),
+            rgb(22 23 34 / 100%)
+        ),
+        url(/assets/images/BEN_4677.webp);
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 100px 0px;
+
+    .left {
+        color: #fff;
+
+        h4 {
+            text-transform: uppercase;
+            font-size: 20px;
+            color: #fcad03;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 50px;
+            color: #fff;
+            margin: 0px;
+            line-height: 50px;
+        }
+
+        p {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    }
+
+    .right {
+        flex: 1;
+        .box {
+            margin: 10px;
+            background: #140741;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            height: 200px;
+            width: 200px;
+
+            h4 {
+                font-weight: 900;
+                color: #fff;
+                font-size: 26px;
+                margin: 10px 0px;
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            svg {
+                height: 50px;
+                width: 50px;
+                margin: auto;
+            }
+        }
+    }
+}
+
 @media (max-width: 640px) {
     .banner {
         background: linear-gradient(50deg, #140741, #fcad03);
+        overflow: hidden;
         .content {
             padding-top: 80px;
             width: 100%;
@@ -243,6 +453,11 @@ export default {
         .artworks {
             padding: 50px 0px;
         }
+
+        .v-img {
+            right: -50%;
+            top: 43%;
+        }
     }
 
     .course-section {
@@ -253,7 +468,7 @@ export default {
         }
     }
 
-    .out-pastor-section {
+    .our-pastor-section {
         padding: 50px 0px;
         .details {
             padding: 20px 10px;
@@ -262,6 +477,46 @@ export default {
         h2 {
             font-size: 2.2em;
             line-height: 32px;
+        }
+    }
+
+    .mission-section {
+        padding: 50px 0px;
+
+        .left {
+            h4 {
+                font-size: 18px;
+            }
+
+            h2 {
+                font-size: 32px;
+                line-height: 32px;
+            }
+        }
+
+        .right {
+            margin-top: 30px;
+            flex: 1;
+            .box {
+                padding: 10px;
+                border-radius: 10px;
+                height: 125px;
+                width: 125px;
+
+                h4 {
+                    font-size: 18px;
+                }
+
+                p {
+                    font-size: 12px;
+                    margin-top: 10px;
+                }
+
+                svg {
+                    height: 25px;
+                    width: 25px;
+                }
+            }
         }
     }
 }

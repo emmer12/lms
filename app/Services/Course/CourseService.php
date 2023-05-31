@@ -14,6 +14,7 @@ use App\Models\Question;
 use App\Services\Media\MediaService;
 use App\Traits\Filterable;
 use App\Utilities\Data;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Bouncer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -71,7 +72,7 @@ class CourseService
      */
     public function index($data)
     {
-        $query = Course::query()->orderBy('created_at', 'desc');
+        $query = Course::withCount('lessons', 'users')->orderBy('created_at', 'desc');
         if (!empty($data['search'])) {
             $query = $query->search($data['search']);
         }

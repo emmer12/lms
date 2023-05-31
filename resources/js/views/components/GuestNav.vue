@@ -4,7 +4,9 @@
             <div class="container-x">
                 <div class="wrapper">
                     <div class="logo">
-                        <img class="mt-4" src="/assets/images/logo.png" />
+                        <router-link to="/"
+                            ><img class="mt-4" src="/assets/images/logo.png"
+                        /></router-link>
                     </div>
                     <div class="menu">
                         <ul class="left">
@@ -62,43 +64,85 @@
                                         alt="Avatar"
                                     />
 
-                                    <span class="relative pt-3 mr-2 ml-2">
+                                    <!-- <span class="relative pt-3 mr-2 ml-2">
                                         <Icon
                                             :name="
                                                 state.isAccountDropdownOpen
                                                     ? 'angle-up'
                                                     : 'angle-down'
                                             "
-                                    /></span>
+                                    /></span> -->
                                 </div>
-
-                                <div
-                                    v-if="state.isAccountDropdownOpen"
-                                    class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
+                                <transition
+                                    @before-enter="beforeEnter"
+                                    @enter="enter"
+                                    @leave="leave"
+                                    name="toggle"
+                                    mode="in-out"
                                 >
-                                    <router-link
-                                        to="/panel"
-                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                    <div
+                                        v-if="state.isAccountDropdownOpen"
+                                        class="hidden sm:block absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
                                     >
-                                        {{ trans("Dashboard") }}
-                                    </router-link>
+                                        <router-link
+                                            to="/panel"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                        >
+                                            {{ trans("Dashboard") }}
+                                        </router-link>
 
-                                    <router-link
-                                        to="/panel/my-courses"
-                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
-                                    >
-                                        {{ trans("My Courses") }}
-                                    </router-link>
+                                        <router-link
+                                            to="/panel/my-courses"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                        >
+                                            {{ trans("My Courses") }}
+                                        </router-link>
 
-                                    <a
-                                        href="#"
-                                        @click.prevent="onLogout"
-                                        class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
-                                        >{{
-                                            trans("global.phrases.sign_out")
-                                        }}</a
+                                        <a
+                                            href="#"
+                                            @click.prevent="onLogout"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                            >{{
+                                                trans("global.phrases.sign_out")
+                                            }}</a
+                                        >
+                                    </div>
+                                </transition>
+                                <transition
+                                    @before-enter="beforeEnter"
+                                    @enter="enter"
+                                    @leave="leave"
+                                    name="toggle"
+                                    mode="in-out"
+                                >
+                                    <div
+                                        v-if="state.isAccountDropdownOpen"
+                                        class="mobile-menu w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
                                     >
-                                </div>
+                                        <router-link
+                                            to="/panel"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                        >
+                                            {{ trans("Dashboard") }}
+                                        </router-link>
+
+                                        <router-link
+                                            to="/panel/my-courses"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                        >
+                                            {{ trans("My Courses") }}
+                                        </router-link>
+
+                                        <a
+                                            href="#"
+                                            @click.prevent="onLogout"
+                                            class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
+                                            >{{
+                                                trans("global.phrases.sign_out")
+                                            }}</a
+                                        >
+                                    </div>
+                                </transition>
                             </div>
                         </div>
                     </div>
@@ -114,6 +158,7 @@ import Button from "@/views/components/input/Button";
 import { reactive } from "vue";
 import Icon from "@/views/components/icons/Icon";
 import { useAuthStore } from "@/stores/auth";
+import gsap from "gsap";
 
 export default {
     components: {
@@ -134,12 +179,36 @@ export default {
             logout();
         }
 
+        const beforeEnter = (el) => {
+            el.style.opacity = 0;
+            el.style.top = 150;
+        };
+        const enter = (el, done) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 10,
+                duration: 0.5,
+                onComplete: done,
+            });
+        };
+        const leave = (el, done) => {
+            gsap.to(el, {
+                opacity: 0,
+                duration: 0.3,
+                y: -50,
+                onComplete: done,
+            });
+        };
+
         return {
             state,
             user,
             loggedIn,
             onLogout,
             trans,
+            beforeEnter,
+            enter,
+            leave,
         };
     },
 };
@@ -210,6 +279,12 @@ export default {
         align-items: center;
         justify-content: center;
     }
+
+    .avatar {
+        box-shadow: 0 8px 20px rgb(0 0 0 / 6%);
+        border-radius: 5px;
+        border: 4px solid #fff;
+    }
 }
 
 @media (max-width: 640px) {
@@ -220,6 +295,15 @@ export default {
                 /* flex: 1; */
             }
         }
+    }
+
+    .mobile-menu {
+        top: 92px;
+        left: 50%;
+        position: fixed;
+        z-index: 22222;
+        transform: translateX(-50%);
+        width: 90%;
     }
 }
 </style>

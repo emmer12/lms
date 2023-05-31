@@ -53,7 +53,9 @@
                             <line x1="16" y1="17" x2="8" y2="17"></line>
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
-                        <span class="text-md">13 Lesson</span>
+                        <span class="text-md"
+                            >{{ course.lessons_count }} Lesson</span
+                        >
                     </div>
                     <div class="flex items-center gap-2 mr-4">
                         <svg
@@ -93,7 +95,9 @@
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
-                        <span class="text-md">Students</span>
+                        <span class="text-md">
+                            {{ course.users_count }} Students</span
+                        >
                     </div>
                 </div>
 
@@ -205,6 +209,7 @@ export default {
         span {
             color: #6f6b80;
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .s2 {

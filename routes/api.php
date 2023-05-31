@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,15 @@ Route::middleware(['auth:sanctum', 'apply_locale'])->group(function () {
      * Roles
      */
     Route::get('/roles/search', [RoleController::class, 'search'])->middleware('throttle:400,1');
+
+    Route::get('/dash-page-data', [HomeController::class, 'dashboardUserData']);
 });
+
+
+Route::get('/home-page-data', [HomeController::class, 'index']);
+
+
+
 
 /**
  * include all route files in the allapiroutes folder except auth.php

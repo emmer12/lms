@@ -9,9 +9,13 @@
                             <img class="mt-4" src="/assets/images/logo.png" />
 
                             <!-- <p>© Copyright RCCG E 2022</p> -->
-                            <p class="mt-3">(480) 555-0103</p>
-                            <p>4517 Washington Ave.</p>
-                            <p>finsweet@example.com</p>
+                            <!-- <p class="mt-3">(480) 555-0103</p> -->
+                            <p>
+                                Address 4250 W Walton Street, Chicago IL 60651.
+                            </p>
+                            <a href="mailto:admin@kingsword.org"
+                                >admin@kingsword.org</a
+                            >
                         </div>
                         <div class="flex gap-10">
                             <div>
@@ -103,7 +107,7 @@
                     </div>
                 </div>
                 <div class="flex-1 sub">
-                    <h2>
+                    <h2 class="text-gray-300">
                         Subscribe to get Latest <br />
                         Updates and News
                     </h2>

@@ -144,7 +144,7 @@ return [
     ],
 
 
-    'pass_percent' => 70,
+    'pass_percent' => 80,
 
 
     /*

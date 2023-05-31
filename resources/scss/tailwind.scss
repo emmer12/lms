@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "Reey-Regular";
+    src: url("/assets/fonts/Reey-Regular.otf");
+    font-weight: normal;
+}
+
 @layer base {
     body {
         // @apply bg-gray-50;

@@ -109,4 +109,14 @@ export default class CourseService extends ModelService {
         let path = "/course/lesson/completed/" + lesson_id;
         return this.patch(path, {});
     }
+
+    public getHomePageData() {
+        let path = "/home-page-data";
+        return this.get(path);
+    }
+
+    public getUserDashboardData() {
+        let path = "/dash-page-data";
+        return this.get(path);
+    }
 }
