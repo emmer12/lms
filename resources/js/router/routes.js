@@ -1,6 +1,7 @@
 import { default as PageHome } from "@/views/pages/shared/Home";
 import { default as PageCourses } from "@/views/pages/shared/Courses";
 import { default as PageCourseDetails } from "@/views/pages/shared/CourseDetails";
+import { default as PageAbout } from "@/views/pages/shared/About";
 
 import { default as PageLogin } from "@/views/pages/auth/login/Main";
 import { default as PageVerify } from "@/views/pages/auth/verify/Main";
@@ -38,6 +39,12 @@ const routes = [
         path: "/",
         meta: { requiresAuth: false },
         component: PageHome,
+    },
+    {
+        name: "about",
+        path: "/about",
+        meta: { requiresAuth: false },
+        component: PageAbout,
     },
     {
         name: "courses",
@@ -148,7 +155,7 @@ const routes = [
                             requiresAuth: true,
                             requiresAbility: abilities.EDIT_COURSE,
                         },
-                        component: PageUsersEdit,
+                        component: PageCourseEdit,
                     },
                     {
                         name: "course.lesson.create",

@@ -11,8 +11,12 @@ import CourseCard4 from "@/views/components/card/CourseCard4";
 import CourseCard from "@/views/components/card/CourseCard";
 import Header from "@/views/components/Header";
 import CKEditor from "@ckeditor/ckeditor5-vue";
+import Vue3ConfirmDialog from "vue3-confirm-dialog";
+import "vue3-confirm-dialog/style";
 const app = createApp(App);
 
+app.use(Vue3ConfirmDialog);
+app.component("vue3-confirm-dialog", Vue3ConfirmDialog.default);
 app.component("Button", Button);
 app.component("Logo", Logo);
 app.component("CourseCard", CourseCard);

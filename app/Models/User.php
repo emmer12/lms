@@ -6,6 +6,7 @@ use App\Traits\Filterable;
 use App\Traits\Searchable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'avatar_url',
         'full_name',
+        'enrollments'
     ];
 
     /**
@@ -131,6 +133,12 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return implode(' ', $names);
     }
+
+    public function getEnrollmentsAttribute()
+    {
+        return Enrollment::where('user_id', $this->id)->pluck('course_id');
+    }
+
 
     /**
      * Returns the is_admin attribute

@@ -417,6 +417,20 @@
                                 <br />
 
                                 <Button
+                                    v-if="
+                                        authStore.loggedIn &&
+                                        authStore.user.enrollments.includes(
+                                            results?.record?.id
+                                        )
+                                    "
+                                    @click="enroll"
+                                    label="
+                                        Continue
+                                    "
+                                    class="block w-full"
+                                />
+                                <Button
+                                    v-else
                                     @click="enroll"
                                     :label="
                                         results?.record?.price == 0
@@ -453,7 +467,7 @@ export default {
         Pager,
         Spinner,
     },
-    setup() {
+    setup(props) {
         const service = new CourseService();
         const activeTab = ref(1);
         const authStore = useAuthStore();
@@ -507,6 +521,9 @@ export default {
         }
         async function enroll() {
             if (authStore.loggedIn) {
+                if (authStore.user.enrollments.includes(results.record.id)) {
+                    router.push(`/my/learning/${results?.record?.id}`);
+                }
                 try {
                     await service.handleEnroll({
                         course_id: results.record.id,

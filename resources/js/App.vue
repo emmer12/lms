@@ -207,6 +207,8 @@
         />
         <!-- <LearningNav v-else /> -->
         <router-view />
+
+        <vue3-confirm-dialog></vue3-confirm-dialog>
     </div>
     <template v-else>
         <GuestNav
@@ -217,7 +219,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, reactive } from "vue";
+import { computed, onBeforeMount, onMounted, reactive, watch } from "vue";
 
 import { trans } from "@/helpers/i18n";
 import Menu from "@/views/layouts/Menu";
@@ -227,7 +229,7 @@ import Icon from "@/views/components/icons/Icon";
 import AvatarIcon from "@/views/components/icons/Avatar";
 import { useAuthStore } from "@/stores/auth";
 import { useGlobalStateStore } from "@/stores";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAlertStore } from "@/stores";
 import { getAbilitiesForRoute } from "@/helpers/routing";
 
@@ -245,6 +247,7 @@ export default {
         const authStore = useAuthStore();
         const globalStateStore = useGlobalStateStore();
         const route = useRoute();
+        const router = useRouter();
 
         const isLoading = computed(() => {
             var value = false;
@@ -377,6 +380,17 @@ export default {
                 route.query.verified
             ) {
                 alertStore.success(trans("global.phrases.email_verified"));
+            }
+        });
+
+        watch(route, (newTableState) => {
+            if (
+                authStore.loggedIn &&
+                (route.path.includes("panel") ||
+                    route.path.includes("learning")) &&
+                !authStore.user.email_verified_at
+            ) {
+                router.push("/email-verify");
             }
         });
 

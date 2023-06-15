@@ -58,6 +58,9 @@ export const useAuthStore = defineStore("auth", {
             try {
                 const response = await authService.getCurrentUser();
                 this.user = response.data.data;
+                if (!response.data.data.email_verified_at) {
+                    router.push("/email-verify");
+                }
                 this.loading = false;
             } catch (error) {
                 this.loading = false;

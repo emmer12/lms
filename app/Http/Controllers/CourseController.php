@@ -27,6 +27,14 @@ class CourseController extends Controller
     }
 
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function getAll(Request $request)
+    {
+        $this->authorize('list', Course::class);
+        return $this->courseService->index($request->all(), true);
+    }
 
 
     /**
@@ -66,7 +74,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $model = $this->courseService->get($course);
-        return $this->responseDataSuccess(['model' => $model, 'properties' => $this->properties()]);
+        return $this->responseDataSuccess(['model' => $model]);
     }
     public function showBySlug($slug)
     {
@@ -96,16 +104,25 @@ class CourseController extends Controller
         }
     }
 
+
+    public function edit(Course $Course)
+    {
+        $this->authorize('edit', Course::class);
+
+        return $this->show($Course);
+    }
+
+
     public function courseLessons(Course $course, Request $request)
     {
         $model = $this->courseService->courseLessons($course, $request->all());
         return $this->responseDataSuccess($model);
     }
 
-    public function certificate()
+    public function certificate(Course $course)
     {
-        $pdf = $this->courseService->certificate();
-        return $this->responseDataSuccess($pdf);
+        $pdf = $this->courseService->certificate($course);
+        return  $pdf;
     }
 
     /**

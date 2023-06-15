@@ -13,8 +13,9 @@ Route::get('/course-all/{slug}', [CourseController::class, 'showBySlug']);
 
 Route::middleware(['auth:sanctum', 'apply_locale'])->group(
     function () {
-
+        Route::get('/admin/course-all', [CourseController::class, 'getAll']);
         Route::get('/course-my', [CourseController::class, 'myCourses']);
+        Route::get('/course/download-certificate/{course}', [CourseController::class, 'certificate']);
         Route::get('/course-lessons/{course}', [CourseController::class, 'courseLessons']);
         Route::resource('course', CourseController::class);
         Route::get('course/lessons/{lesson}', [LessonController::class, 'show']);
@@ -42,7 +43,5 @@ Route::middleware(['auth:sanctum', 'apply_locale'])->group(
         Route::get('course/quiz/{lesson_id}', [QuizController::class, 'getLQuiz']);
 
         Route::patch('course/lesson/completed/{lesson}', [LessonController::class, 'completed']);
-
-        Route::get('/course/download-certificate', [CourseController::class, 'certificate']);
     }
 );

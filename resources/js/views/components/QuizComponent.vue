@@ -58,7 +58,14 @@
                                 iconRight="fa fa-angle-right"
                                 @click="nextLesson"
                             />
-                            <Button v-else label="Next Certificate" />
+                            <Button
+                                @click="download"
+                                v-if="
+                                    canNext() &&
+                                    currentLesson.quiz_type === 'exam'
+                                "
+                                label="Download Certificate"
+                            />
                         </div>
                     </div>
                 </div>
@@ -136,7 +143,7 @@
                                         :for="'opt-' + option.id"
                                         v-html="option.description"
                                     ></label>
-                                    <span v-if="option.is_correct">Yes</span>
+                                    <!-- <span v-if="option.is_correct">Yes</span> -->
                                 </div>
                             </div>
 
@@ -183,10 +190,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, getCurrentInstance } from "vue";
 import Spinner from "@/views/components/icons/Spinner.vue";
 import VueCountdown from "@chenfengyuan/vue-countdown";
 import CourseService from "@/services/CourseService";
+import { useBus } from "@/hooks";
 
 export default defineComponent({
     components: { VueCountdown },
@@ -213,6 +221,9 @@ export default defineComponent({
     },
     setup(props, { emit }) {
         const service = new CourseService();
+        const app = getCurrentInstance();
+        const $confirm = app.appContext.config.globalProperties.$confirm;
+        const { bus } = useBus();
 
         const data = ref({
             total: props.questions.length,
@@ -259,10 +270,23 @@ export default defineComponent({
             if (timeUp) {
                 processForm();
             } else {
-                const conf = confirm("You are about to submit");
-                if (conf) {
-                    processForm();
-                }
+                $confirm({
+                    message: "Are you sure?",
+                    button: {
+                        no: "No",
+                        yes: "Yes",
+                    },
+                    /**
+                     * Callback Function
+                     * @param {Boolean} confirm
+                     */
+                    callback: (confirm) => {
+                        if (confirm) {
+                            // ... do something
+                            processForm();
+                        }
+                    },
+                });
             }
 
             async function processForm() {
@@ -333,16 +357,16 @@ export default defineComponent({
 
         const canNext = () => {
             let result = false;
-            data.value?.quiz?.log.forEach((log) => {
+
+            for (const log of data.value?.quiz?.log) {
                 const sPercent = getPercent(log.score, log.total_questions);
                 if (sPercent >= Number(window.AppConfig.course_pass_percent)) {
                     result = true;
-                    return;
+                    break;
                 } else {
                     result = false;
                 }
-            });
-            console.log(result);
+            }
             return result;
         };
 
@@ -364,7 +388,12 @@ export default defineComponent({
         };
 
         const nextLesson = () => {
+            bus.emit("lesson_completed");
             emit("next");
+        };
+
+        const download = () => {
+            bus.emit("download_certificate");
         };
 
         return {
@@ -381,6 +410,7 @@ export default defineComponent({
             retake,
             canNext,
             nextLesson,
+            download,
         };
     },
 });
@@ -460,6 +490,16 @@ export default defineComponent({
             }
             &.excellent {
                 background: #ebfbf6;
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .quiz-con {
+        .timer {
+            strong {
+                font-size: 24px;
             }
         }
     }

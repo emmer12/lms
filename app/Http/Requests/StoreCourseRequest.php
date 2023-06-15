@@ -20,7 +20,8 @@ class StoreCourseRequest extends FormRequest
             'description'   => 'sometimes|string',
             'duration'   => 'sometimes|string',
             'published'   => 'sometimes|boolean',
-            'preview'   => 'required|image|max:10240',
+            // 'preview'   => 'required|image|max:10240',
+            'preview' => $this->request->has('preview') ? 'nullable' : 'image|max:10240',
             'featured'   => 'sometimes',
         ];
     }

@@ -19,7 +19,7 @@
                             >
                                 <li @click="navigate">All Courses</li>
                             </router-link>
-                            <router-link to="#" v-slot="{ navigate }">
+                            <router-link to="/about" v-slot="{ navigate }">
                                 <li @click="navigate">About</li>
                             </router-link>
                         </ul>
@@ -85,7 +85,7 @@
                                         class="hidden sm:block absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
                                     >
                                         <router-link
-                                            to="/panel"
+                                            to="/panel/dashboard"
                                             class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
                                         >
                                             {{ trans("Dashboard") }}
@@ -120,7 +120,7 @@
                                         class="mobile-menu w-32 bg-white rounded-lg shadow-lg py-2 mt-4 z-50"
                                     >
                                         <router-link
-                                            to="/panel"
+                                            to="/panel/dashboard"
                                             class="block px-4 py-2 hover:bg-theme-800 hover:text-white hover:opacity-80"
                                         >
                                             {{ trans("Dashboard") }}

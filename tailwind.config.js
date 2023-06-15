@@ -23,7 +23,7 @@ module.exports = {
             },
             fontFamily: {
                 urbanist: ["Urbanist", "sans-serif"],
-                reey: ["Reey-Regular", "cursive"],
+                dance: ["Dancing Script", "cursive"],
             },
         },
     },

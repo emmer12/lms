@@ -33,32 +33,32 @@
         <transition
             @before-enter="beforeEnter"
             @enter="enter"
-            @before-leave="leave"
+            @leave="leave"
             name="toggle"
         >
             <div v-if="open" class="m-content">
                 <audio
                     v-if="material.content_type == 'audio'"
                     controls
-                    :src="`http://localhost:8000/storage/${material.path}`"
+                    :src="material.full_path"
                 ></audio>
 
                 <div v-if="material.content_type == 'video'">
                     <div v-if="material.source == 'upload'">
-                        <video
-                            controls
-                            :src="`http://localhost:8000/storage/${material.path}`"
-                        ></video>
+                        <video controls :src="material.full_path"></video>
                     </div>
                     <div v-else>
                         <div v-html="material.embed_code"></div>
                     </div>
                 </div>
-                <div v-if="material.content_type == 'doc'">
-                    <a
-                        :href="`http://localhost:8000/storage/${material.path}`"
-                        >{{ material.title }}</a
-                    >
+                <div
+                    class="inline-flex px-3 rounded-lg items-center gap-3 text-theme-800 bg-theme-100 text-sm font-bold"
+                    v-if="material.content_type == 'doc'"
+                >
+                    <a :href="material.full_path" download
+                        >{{ material.title }}
+                    </a>
+                    <Download />
                 </div>
             </div>
         </transition>
@@ -70,6 +70,7 @@ import Lock from "@/views/components/icons/Lock.vue";
 import FileList from "@/views/components/icons/FileList.vue";
 import Eye from "@/views/components/icons/Eye.vue";
 import Audio from "@/views/components/icons/Audio.vue";
+import Download from "@/views/components/icons/Download.vue";
 import Video from "@/views/components/icons/Video.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
@@ -83,6 +84,7 @@ export default {
         Eye,
         Audio,
         Video,
+        Download,
     },
     setup(props, { emit }) {
         const router = useRouter();
@@ -98,14 +100,14 @@ export default {
         const enter = (el, done) => {
             gsap.to(el, {
                 opacity: 1,
-                duration: 1,
+                duration: 0.4,
                 onComplete: done,
             });
         };
         const leave = (el, done) => {
             gsap.to(el, {
                 opacity: 0,
-                duration: 1,
+                duration: 0.4,
                 onComplete: done,
             });
         };

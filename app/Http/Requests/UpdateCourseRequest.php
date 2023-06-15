@@ -18,9 +18,9 @@ class UpdateCourseRequest extends FormRequest
             'title' => 'required|string|max:100',
             'price'   => 'sometimes|required|numeric',
             'description'   => 'sometimes|string',
-            'duration'   => 'sometimes|numeric',
+            'duration'   => 'sometimes|string',
             'published'   => 'sometimes|boolean',
-            'preview'   => 'sometimes|image|max:10240',
+            'preview'   => 'nullable|image',
         ];
     }
 }

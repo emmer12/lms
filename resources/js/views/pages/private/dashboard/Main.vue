@@ -5,6 +5,7 @@
         </h1>
 
         <div class="course">
+            <!-- <pre> {{ authStore.user }}</pre> -->
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="bg-white w-full sm:w-1/2 p-3 rounded-[20px]">
                     <div class="p-3">

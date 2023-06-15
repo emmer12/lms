@@ -4,8 +4,8 @@
             <div class="container-x">
                 <div class="flex flex-col sm:flex-row">
                     <div class="content flex-1 w-full sm:w-fill/2">
-                        <h4 class="mb-4 font-reey">Welcome to</h4>
-                        <h2 class="mb-8">KingsWord Learning institute</h2>
+                        <h4 class="mb-4 font-dance">Welcome to</h4>
+                        <h2 class="mb-8">KingsWord Learning Portal</h2>
 
                         <Button
                             class="mb-4 sm:mb-16"
@@ -15,12 +15,12 @@
 
                         <p class="note">
                             Grow your spirit and become part of the growing
-                            supernatural armies.
+                            supernatural army.
                         </p>
                     </div>
                     <div class="artworks flex-1">
                         <div class="flex">
-                            <div class="flex flex-col">
+                            <div class="flex flex-row">
                                 <div v-if="results.featured">
                                     <CourseCard1 :course="results.featured" />
                                 </div>
@@ -30,11 +30,11 @@
                                         alt="Images"
                                     />
                                     <div class="info">
-                                        <h4>Student Signup</h4>
-                                        <p>Become a member</p>
+                                        <h4>Student Sign up</h4>
+                                        <!-- <p>Become a member</p> -->
                                     </div>
                                     <Button
-                                        label="Join Now"
+                                        label="Enroll"
                                         size="sm"
                                         to="/register"
                                         iconRight="fa fa-arrow-right"
@@ -42,11 +42,11 @@
                                 </div>
                             </div>
                             <div>
-                                <img
+                                <!-- <img
                                     src="/assets/images/video-image-2.png"
                                     alt="Video Image"
                                     class="v-img"
-                                />
+                                /> -->
                             </div>
                         </div>
                     </div>
@@ -64,19 +64,30 @@
                     </div>
                     <div class="details flex-1">
                         <h4>KMI LEARNING PORTAL</h4>
-                        <h2>Welcome to KingsWord Learning Institute</h2>
+                        <h2>Welcome to KingsWord Learning Portal</h2>
                         <p>
-                            Here we can have short information about the portal
-                            and the mission on the website. Here we can have
-                            short information about the portal and the mission
-                            on the website. Here we can have short information
-                            about the portal and the mission on the website.
+                            We are thrilled to have you join us in this exciting
+                            journey of knowledge and growth. Whether you are a
+                            student, a professional, or simply an avid learner,
+                            our online platform is designed to empower you with
+                            valuable insights and skills.
+                        </p>
+                        <p>
+                            Through our user-friendly interface, you will have
+                            access to engaging course materials, interactive
+                            quizzes, and thought-provoking discussions. Our
+                            dedicated instructors are committed to providing you
+                            with a dynamic and enriching learning experience,
+                            ensuring that you have the support you need every
+                            step of the way.
                         </p>
 
                         <div class="list">
                             <div class="flex my-3 items-center">
                                 <confirmed />
-                                <p>Get unlimited access to KTI resources</p>
+                                <p>
+                                    Get unlimited access to learning resources
+                                </p>
                             </div>
                             <div class="flex my-3 items-center">
                                 <confirmed />
@@ -88,17 +99,16 @@
                             <div class="flex my-3 items-center">
                                 <confirmed />
                                 <p>
-                                    Find the best qualitfied teacher of the
-                                    gospel
-                                </p>
-                            </div>
-                            <div class="flex my-3 items-center">
-                                <confirmed />
-                                <p>
                                     Grow in your faith, and mature in the spirit
                                 </p>
                             </div>
                         </div>
+                        <p>
+                            Once again, welcome to the KingsWord Learning
+                            Portal. We are excited to have you as part of our
+                            vibrant online community. Get ready to unlock your
+                            potential and thrive!
+                        </p>
 
                         <br />
 
@@ -113,7 +123,7 @@
         <div class="course-section">
             <div class="container-x">
                 <Header
-                    title="Featured On This Month"
+                    title="Featured for this month"
                     subtitle="Featured Courses"
                 />
 
@@ -143,29 +153,29 @@
             <div class="container-x">
                 <div class="flex flex-col sm:flex-row">
                     <div class="left w-full sm:w-1/3">
-                        <h4>KTI Mission</h4>
-                        <h2>Our Mission is to make you grow spiritually</h2>
-                        <p>
-                            Grow your spirit and become part of the growing
-                            supernatural armies.
-                        </p>
+                        <h4>Our Mission</h4>
+                        <h2>
+                            To help you cultivate a strong foundation and
+                            relationship with God through learning.
+                        </h2>
+                        <p>Begin your transformational journey today!</p>
                     </div>
 
                     <div class="right flex">
                         <div class="box">
                             <Teacher />
-                            <h4>20</h4>
-                            <p>Pro Teachers</p>
+                            <h4>20+</h4>
+                            <p>Instructors</p>
                         </div>
                         <div class="box">
                             <OnlineCourse />
-                            <h4>50</h4>
+                            <h4>30+</h4>
                             <p>Courses</p>
                         </div>
                         <div class="box">
                             <Student />
-                            <h4>6,000</h4>
-                            <p>Enrolled Students</p>
+                            <h4>6,000+</h4>
+                            <p>Community</p>
                         </div>
                     </div>
                 </div>
@@ -235,6 +245,7 @@ export default {
     /* background-image: url(/assets/images/banner1.png); */
     /* height: 663px; */
     position: relative;
+    padding-bottom: 50px;
 
     .content {
         padding-top: 128px;
@@ -334,11 +345,19 @@ export default {
     transition: background 0.3s, border 0.3s, border-radius 0.3s,
         box-shadow 0.3s;
     background: #fff;
-    margin-top: 10px;
+    margin-top: 0px;
     padding: 20px;
     width: fit-content;
     align-self: end;
     border-radius: 5px;
+    margin-left: 10px;
+
+    @media (max-width: 640px) {
+        flex-shrink: 0;
+        margin-left: -87px;
+        top: 51px;
+        position: relative;
+    }
 
     .info {
         margin: 15px 0px;
@@ -387,7 +406,7 @@ export default {
 
         h2 {
             font-weight: 700;
-            font-size: 50px;
+            font-size: 40px;
             color: #fff;
             margin: 0px;
             line-height: 50px;
@@ -434,6 +453,7 @@ export default {
     .banner {
         background: linear-gradient(50deg, #140741, #fcad03);
         overflow: hidden;
+
         .content {
             padding-top: 80px;
             width: 100%;

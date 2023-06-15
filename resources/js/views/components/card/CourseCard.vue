@@ -106,7 +106,12 @@
                 <div class="flex mt-5 mb-2">
                     <Button
                         size="md"
-                        label="Enroll Now"
+                        :label="
+                            authStore.loggedIn &&
+                            authStore.user.enrollments.includes(course.id)
+                                ? 'Continue'
+                                : 'Enroll Now'
+                        "
                         iconRight="fa fa-arrow-right"
                         @click="enroll"
                         :disabled="isLoading"
@@ -136,6 +141,9 @@ export default {
 
         async function enroll() {
             if (authStore.loggedIn) {
+                if (authStore.user.enrollments.includes(props.course.id)) {
+                    router.push(`/my/learning/${props?.course?.id}`);
+                }
                 try {
                     isLoading.value = true;
                     await service.handleEnroll({
@@ -163,7 +171,7 @@ export default {
             }
         }
 
-        return { enroll, isLoading };
+        return { enroll, isLoading, authStore };
     },
 };
 </script>

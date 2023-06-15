@@ -136,7 +136,7 @@ class UserController extends Controller
      */
     public function updateAvatar(UpdateAvatarRequest $request, User $user)
     {
-        $this->authorize('edit-profile', User::class);
+        // $this->authorize('edit-profile', User::class);
 
         $data = $request->validated();
         if ($this->userService->updateAvatar($user, $data)) {

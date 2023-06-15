@@ -21,14 +21,11 @@
                             <div>
                                 <h4 class="heading">Quick link</h4>
                                 <ul>
-                                    <router-link to="#" v-slot="{ navigate }">
+                                    <router-link
+                                        to="/about"
+                                        v-slot="{ navigate }"
+                                    >
                                         <li @click="navigate">About Us</li>
-                                    </router-link>
-                                    <router-link to="#" v-slot="{ navigate }">
-                                        <li @click="navigate">Sermons</li>
-                                    </router-link>
-                                    <router-link to="#" v-slot="{ navigate }">
-                                        <li @click="navigate">Events</li>
                                     </router-link>
                                 </ul>
                             </div>

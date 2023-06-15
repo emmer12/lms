@@ -1,5 +1,5 @@
 import ModelService from "@/services/ModelService";
-
+import fileDownload from "js-file-download";
 export default class CourseService extends ModelService {
     constructor() {
         super();
@@ -7,7 +7,7 @@ export default class CourseService extends ModelService {
     }
 
     public getAllCourse(params = {}) {
-        let path = "/course-all";
+        let path = "/admin/course-all";
         let query = new URLSearchParams(params).toString();
         if (query) {
             path += "?" + query;
@@ -118,5 +118,16 @@ export default class CourseService extends ModelService {
     public getUserDashboardData() {
         let path = "/dash-page-data";
         return this.get(path);
+    }
+
+    public async downloadCertificate(course_id) {
+        let path = `/course/download-certificate/${course_id}`;
+
+        const res = await this.get(path, {
+            responseType: "blob",
+        });
+
+        fileDownload(res.data, `certificate.pdf`);
+        return res;
     }
 }

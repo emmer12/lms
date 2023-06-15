@@ -11,13 +11,46 @@
                 </div>
 
                 <div class="content">
-                    <h2>Start Your Learning Journey With Us.</h2>
+                    <h2>Begin your learning journey with us.</h2>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Dicta sapiente dolor, consequuntur laborum a quos vel
-                        repellat illo neque non natus voluptate. Beatae
-                        possimus, vel libero tempora amet quos ex?
+                        Begin your learning journey with us at KingsWord
+                        Learning Portal, where knowledge and personal growth
+                        await you!
                     </p>
+
+                    <div class="list">
+                        <div class="flex my-3 items-center">
+                            <confirmed />
+                            <p>
+                                <strong>Create an Account:</strong> Sign up for
+                                a free account on our learning portal. This will
+                                give you access to our course materials,
+                                discussion forums, and other interactive
+                                features.
+                            </p>
+                        </div>
+                        <div class="flex my-3 items-center">
+                            <confirmed />
+                            <p>
+                                <strong>Enroll in Courses:</strong> Select the
+                                courses that align with your learning objectives
+                                and enroll in them. Our courses are designed to
+                                be self-paced, allowing you to learn at a speed
+                                that suits your schedule, but must be completed
+                                within a specific time frame.
+                            </p>
+                        </div>
+                        <div class="flex my-3 items-center">
+                            <confirmed />
+                            <p>
+                                <strong>Engage with Course Materials</strong>
+                                Dive into the course materials, including video
+                                lectures, readings, and interactive exercises.
+                                Immerse yourself in the knowledge and wisdom
+                                shared by our expert instructors.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -31,8 +64,12 @@
 <script>
 import { defineComponent } from "vue";
 import { trans } from "@/helpers/i18n";
+import Confirmed from "@/views/components/icons/Confirmed.vue";
 
 export default defineComponent({
+    components: {
+        Confirmed,
+    },
     name: "Auth",
     setup() {
         let AppConfig = window.AppConfig;
@@ -52,11 +89,11 @@ export default defineComponent({
     padding: 40px;
 
     .content {
-        margin-top: 100px;
+        margin-top: 20px;
 
         h2 {
             color: #fff;
-            font-size: 40px;
+            font-size: 24px;
             font-weight: 800;
         }
 
@@ -64,6 +101,16 @@ export default defineComponent({
             color: rgba(255, 255, 255, 0.9);
             margin-top: 30px;
         }
+    }
+}
+
+.list {
+    svg {
+        height: 20px;
+        width: 20px;
+        fill: #fcad03;
+        margin-right: 15px;
+        flex-shrink: 0;
     }
 }
 </style>

@@ -12,7 +12,7 @@
                         stroke-width="5"
                         stroke="currentColor"
                         fill="transparent"
-                        r="40"
+                        r="20"
                         cx="50"
                         cy="50"
                     />
@@ -27,12 +27,12 @@
                         stroke-linecap="round"
                         stroke="currentColor"
                         fill="transparent"
-                        r="40"
+                        r="20"
                         cx="50"
                         cy="50"
                     />
                 </svg>
-                <span class="absolute text-xl text-blue-700">
+                <span class="absolute text-sm text-blue-700">
                     {{ course.pivot.progress }}%</span
                 >
             </div>
@@ -128,7 +128,7 @@ export default {
     props: ["course"],
 
     setup() {
-        const circumference = 100 * 2 * Math.PI;
+        const circumference = 20 * 2 * Math.PI;
 
         return {
             circumference,

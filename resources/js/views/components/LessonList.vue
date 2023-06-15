@@ -9,7 +9,7 @@
         </div>
         <div class="a-status">
             <div>
-                <div v-if="certificate_eligible">
+                <div v-if="certificate_eligible" @click="download()">
                     <Download />
                 </div>
                 <div v-else>
@@ -21,6 +21,7 @@
     <div
         v-else
         class="lesson-list-con flex items-center justify-between px-5 p-4 bg-[#f9fafc] my-2"
+        :class="{ active: lesson.id == $route.params.lesson_id }"
         @click="handleSelect(lesson.id)"
     >
         <div class="flex items-center">
@@ -48,7 +49,11 @@ import FileList from "@/views/components/icons/FileList.vue";
 import Download from "@/views/components/icons/Download.vue";
 import Certificate from "@/views/components/icons/Certificate.vue";
 import Eye from "@/views/components/icons/Eye.vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import CourseService from "@/services/CourseService";
+import { ref, onMounted } from "vue";
+import { useBus } from "@/hooks";
+import { useAlertStore } from "@/stores/alert";
 
 export default {
     props: [
@@ -69,6 +74,12 @@ export default {
     },
     setup(props, { emit }) {
         const router = useRouter();
+        const route = useRoute();
+        const downloading = ref(false);
+        const service = new CourseService();
+        const { bus } = useBus();
+        const alertStore = useAlertStore();
+
         function handleSelect(id) {
             if (canView()) {
                 emit("selected", id);
@@ -89,7 +100,29 @@ export default {
             );
         }
 
-        return { handleSelect, canView };
+        const download = async () => {
+            const course_id = route.params.id;
+
+            downloading.value = true;
+            try {
+                await service.downloadCertificate(course_id);
+                alertStore.success("Congratulations!");
+
+                router.push("/courses");
+
+                downloading.value = false;
+            } catch (err) {
+                downloading.value = false;
+            }
+        };
+
+        onMounted(() => {
+            bus.on("download_certificate", () => {
+                download();
+            });
+        });
+
+        return { handleSelect, canView, download };
     },
 };
 </script>
@@ -100,6 +133,10 @@ export default {
     svg {
         height: 16px !important;
         width: 16px !important;
+    }
+
+    &.active {
+        background: #e1eaf8;
     }
 }
 </style>

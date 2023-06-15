@@ -67,10 +67,10 @@ class CourseService
 
     /**
      * Get resource index from the database
-     * @param $query
+     * @param $query $all
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index($data)
+    public function index($data, $all = false)
     {
         $query = Course::withCount('lessons', 'users')->orderBy('created_at', 'desc');
         if (!empty($data['search'])) {
@@ -83,7 +83,10 @@ class CourseService
             $query = $query->orderBy($data['sort_by'], $data['sort']);
         }
 
-        $query = $query->where('published', true);
+        if (!$all) {
+            $query = $query->where('published', true);
+        }
+
 
         return CourseResource::collection($query->paginate(10));
     }
@@ -243,6 +246,15 @@ class CourseService
     public function update(Course $course, array $data)
     {
         $data = $this->clean($data);
+
+        if (isset($data['preview']) && $data['preview']) {
+            $preview = $this->mediaService->storePreview($data['preview'], 'public', 'course');
+            if (!empty($preview)) {
+                $data['preview'] =
+                    $preview;
+            }
+        }
+
         return $course->update($data);
     }
 
@@ -273,14 +285,35 @@ class CourseService
     }
 
 
-    public function certificate()
+    public function certificate(Course $course)
     {
+
+        $cUser = CourseUser::where('course_id', $course->id)->where('user_id', auth()->id())->first();
+
+        if ($cUser) {
+            if ($cUser->certificate_eligible) {
+                $pdf = $this->sendCertificate($course);
+
+                $cUser->certificate_issued = true;
+                $cUser->save();
+                return $pdf;
+            } else {
+                return false;
+            }
+        }
+    }
+
+
+    private function sendCertificate($course)
+    {
+        $currentDate = Carbon::now()->format('d/m/Y');
         $data = [
-            'firstname' => 'Emmanuel ',
-            'lastname' => 'Taiwo',
-            'year' => 2023
+            "full_name" => auth()->user()->full_name,
+            "date" => $currentDate
         ];
         $pdf = Pdf::loadView('pdf.certificate', $data);
+        $customPaper = array(0, 0, 1056, 816);
+        $pdf->setPaper($customPaper)->save('pdf/' . $data['full_name'] . '-' . $course->slug . '.pdf');
         return $pdf->download('invoice.pdf');
     }
 

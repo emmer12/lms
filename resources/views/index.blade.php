@@ -5,7 +5,17 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>{{ env('APP_NAME') }}</title>
+    <title>{{ 'KMI LEARNING PORTAL' }}</title>
+    <meta property="og:title" content="KMI LEARNING PORTAL" />
+    <meta property="og:description"
+        content="Welcome to KingsWord Learning Portal, your premier online spiritual development centre!" />
+    <meta property="og:url" content="https://learning.kingsword.org" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="{{ asset('favicon.png') }}" sizes="32x32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     @vite(['resources/scss/main.scss', 'resources/js/main.js'])
 

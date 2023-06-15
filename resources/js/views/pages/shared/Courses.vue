@@ -36,7 +36,7 @@
             <div class="py-10">
                 <div class="container-x">
                     <div class="flex justify-between items-center my-3">
-                        <span>Showing 1 - 6 OF 15 Results</span>
+                        <span>Showing 1 - 1 OF 1 Results</span>
                         <div>
                             <input
                                 type="search"
