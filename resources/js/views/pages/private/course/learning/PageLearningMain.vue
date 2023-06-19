@@ -98,6 +98,39 @@
                     v-if="$route.name == 'my.learning'"
                 >
                     <div class="ck" v-html="results?.course?.description"></div>
+                    <div
+                        class="p-4 bg-theme-100 rounded-xl"
+                        v-if="
+                            results?.course_progress?.pivot
+                                ?.certificate_eligible
+                        "
+                    >
+                        <span class="block text-theme-800 mb-5">
+                            Congratulations! You have completed this
+                            course.</span
+                        >
+
+                        <Button
+                            label="Download Certificate"
+                            size="sm"
+                            :to="{
+                                name: 'my.course.congratulations',
+                                params: { id: results.course.id },
+                            }"
+                        />
+                    </div>
+                    <div v-else>
+                        <Button
+                            size="md"
+                            @click="next(results.next_id)"
+                            :label="
+                                results.completed.length
+                                    ? 'Continue'
+                                    : 'Start Now'
+                            "
+                            v-if="!results.loading"
+                        />
+                    </div>
                 </div>
                 <router-view></router-view>
             </div>
@@ -237,6 +270,13 @@ export default {
             router.push("/panel/my-courses");
         };
 
+        const next = (index) => {
+            router.push({
+                name: "my.learning.lesson",
+                params: { lesson_id: index },
+            });
+        };
+
         return {
             results,
             trans,
@@ -247,6 +287,7 @@ export default {
             open,
             setOpen,
             close,
+            next,
         };
     },
 };

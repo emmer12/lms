@@ -118,7 +118,7 @@ export default {
             results.loading = true;
             let query = prepareQuery(params);
             service
-                .getAllCourse(query)
+                .getCourses(query)
                 .then((response) => {
                     results.records = response.data.data;
                     results.pagination.meta = response.data.meta;

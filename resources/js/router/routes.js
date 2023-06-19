@@ -30,6 +30,7 @@ import { default as PageLessonsMaterialList } from "@/views/pages/private/course
 
 import { default as PageLearningMain } from "@/views/pages/private/course/learning/PageLearningMain";
 import { default as PageLearning } from "@/views/pages/private/course/learning/PageLearning";
+import { default as PageCongrat } from "@/views/pages/private/course/learning/PageCongrat";
 
 import abilities from "@/stub/abilities";
 
@@ -71,6 +72,12 @@ const routes = [
                 component: PageLearning,
             },
         ],
+    },
+    {
+        name: "my.course.congratulations",
+        path: "/my/course/congratulations/:id",
+        meta: { requiresAuth: true },
+        component: PageCongrat,
     },
 
     {

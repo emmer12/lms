@@ -143,7 +143,7 @@
                                         :for="'opt-' + option.id"
                                         v-html="option.description"
                                     ></label>
-                                    <!-- <span v-if="option.is_correct">Yes</span> -->
+                                    <span v-if="option.is_correct">Yes</span>
                                 </div>
                             </div>
 
@@ -176,7 +176,7 @@
                 </div>
             </div>
         </div>
-        <div v-else class="flex items-center">
+        <div v-else class="flex items-center py-5">
             <div class="">
                 <div class="ck" v-html="currentLesson.description"></div>
                 <Button
@@ -500,6 +500,7 @@ export default defineComponent({
         .timer {
             strong {
                 font-size: 24px;
+                white-space: nowrap;
             }
         }
     }

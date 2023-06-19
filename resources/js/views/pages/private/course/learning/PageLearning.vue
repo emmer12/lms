@@ -86,7 +86,7 @@
 import MaterialList from "@/views/components/MaterialList.vue";
 import Times from "@/views/components/icons/Times";
 import CourseService from "@/services/CourseService";
-import { watch, onMounted, reactive, ref } from "vue";
+import { watch, onMounted, reactive, ref, getCurrentInstance } from "vue";
 import { trans } from "@/helpers/i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
@@ -108,6 +108,8 @@ export default {
         const route = useRoute();
         const router = useRouter();
         const { bus } = useBus();
+        const app = getCurrentInstance();
+        const $confirm = app.appContext.config.globalProperties.$confirm;
 
         const results = reactive({
             courses: null,
@@ -182,12 +184,35 @@ export default {
         }
 
         const completed = async () => {
+            $confirm({
+                message: "Do You wish to go to the next lesson?",
+                button: {
+                    no: "No",
+                    yes: "Yes",
+                },
+                /**
+                 * Callback Function
+                 * @param {Boolean} confirm
+                 */
+                callback: (confirm) => {
+                    if (confirm) {
+                        processCom(true);
+                    } else {
+                        processCom(false);
+                    }
+                },
+            });
             results.loading = true;
+        };
+
+        const processCom = async (redirect) => {
             try {
                 await service.markCompleted(currentLesson.value.id);
                 fetchPage({ lesson_id: route.params.lesson_id });
                 results.loading = false;
                 bus.emit("lesson_completed");
+                if (!redirect) return;
+                next(true);
             } catch {
                 results.loading = false;
             }
@@ -197,10 +222,9 @@ export default {
             router.push("/panel/my-courses");
         };
 
-        const next = () => {
+        const next = (auto = false) => {
             const { currentIndex, lesson_ids } = getCurrentIndex();
-
-            if (!results.completed_prev) return;
+            if (!results.completed_prev && !auto) return;
 
             router.push({
                 name: "my.learning.lesson",
@@ -352,8 +376,6 @@ export default {
     }
 }
 
-
-@media (max-width:640px) {
-
+@media (max-width: 640px) {
 }
 </style>

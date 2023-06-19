@@ -15,6 +15,15 @@ export default class CourseService extends ModelService {
         return this.get(path, {});
     }
 
+    public getCourses(params) {
+        let path = "/course-all";
+        let query = new URLSearchParams(params).toString();
+        if (query) {
+            path += "?" + query;
+        }
+        return this.get(path, {});
+    }
+
     public getCourse(slug) {
         let path = `/course-all/${slug}`;
         return this.get(path, {});

@@ -103,17 +103,22 @@ export default {
         const download = async () => {
             const course_id = route.params.id;
 
-            downloading.value = true;
-            try {
-                await service.downloadCertificate(course_id);
-                alertStore.success("Congratulations!");
+            router.push({
+                name: "my.course.congratulations",
+                params: { id: course_id },
+            });
 
-                router.push("/courses");
+            // downloading.value = true;
+            // try {
+            //     await service.downloadCertificate(course_id);
+            //     alertStore.success("Congratulations!");
 
-                downloading.value = false;
-            } catch (err) {
-                downloading.value = false;
-            }
+            //     router.push("/my/learning/congratulations");
+
+            //     downloading.value = false;
+            // } catch (err) {
+            //     downloading.value = false;
+            // }
         };
 
         onMounted(() => {
