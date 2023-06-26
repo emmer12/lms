@@ -40,6 +40,7 @@
                         <div>
                             <input
                                 type="search"
+                                v-model="mainQuery.search"
                                 class="block w-full sm:w-64 px-3 py-3 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-theme-500 focus:border-theme-500 text-sm"
                             />
                         </div>
@@ -87,6 +88,7 @@ import Pager from "@/views/components/Pager";
 import { getResponseError, prepareQuery } from "@/helpers/api";
 import { trans } from "@/helpers/i18n";
 import Spinner from "@/views/components/icons/Spinner";
+import { useRoute } from "vue-router";
 
 export default {
     components: {
@@ -97,6 +99,7 @@ export default {
     },
     setup() {
         const service = new CourseService();
+        const route = useRoute();
 
         const results = reactive({
             records: [],
@@ -137,6 +140,10 @@ export default {
 
         onMounted(() => {
             fetchPage(mainQuery);
+
+            if (route.query.search) {
+                mainQuery.search = route.query.search;
+            }
         });
 
         function getPaginationMeta(key) {
@@ -171,6 +178,7 @@ export default {
             currentPage,
             lastPage,
             onPagerInput,
+            mainQuery,
         };
     },
 };

@@ -26,7 +26,10 @@
                     </div>
                     <div class="action">
                         <div class="right">
-                            <button class="search-trigger">
+                            <button
+                                @click="state.showS = !state.showS"
+                                class="search-trigger"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="16"
@@ -144,6 +147,30 @@
                                     </div>
                                 </transition>
                             </div>
+
+                            <div
+                                v-if="state.showS"
+                                class="search-box flex items-center"
+                            >
+                                <input type="text" v-model="state.search" />
+                                <button
+                                    @click="handleSearch"
+                                    class="search-trigger"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-search"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,10 +182,11 @@
 <script>
 import { trans } from "@/helpers/i18n";
 import Button from "@/views/components/input/Button";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import Icon from "@/views/components/icons/Icon";
 import { useAuthStore } from "@/stores/auth";
 import gsap from "gsap";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
     components: {
@@ -167,12 +195,16 @@ export default {
     },
     setup() {
         const { user, loggedIn, logout } = useAuthStore();
+        const router = useRouter();
+        const route = useRoute();
 
         const state = reactive({
             isAccountDropdownOpen: false,
             isMobileMenuOpen: false,
             currentExpandedMenuItem: null,
             app: window.AppConfig,
+            search: "",
+            showS: false,
         });
 
         function onLogout() {
@@ -200,6 +232,15 @@ export default {
             });
         };
 
+        watch(route, (newTableState) => {
+            state.showS = false;
+        });
+
+        const handleSearch = () => {
+            router.push({ name: "courses", query: { search: state.search } });
+            state.search = "";
+        };
+
         return {
             state,
             user,
@@ -209,6 +250,7 @@ export default {
             beforeEnter,
             enter,
             leave,
+            handleSearch,
         };
     },
 };
@@ -257,6 +299,24 @@ export default {
             display: inline-flex;
             align-items: center;
             height: 100%;
+            position: relative;
+
+            .search-box {
+                position: absolute;
+                width: 400px;
+                background: #fff;
+                box-shadow: 0 3px 9px rgba(0, 0, 0, 0.05);
+                top: 70px;
+                z-index: 99999;
+                right: 0px;
+                padding: 10px;
+
+                input {
+                    width: 100%;
+                    border-radius: 3px;
+                    border: 1px solid #ebebeb;
+                }
+            }
         }
     }
     .search-trigger {

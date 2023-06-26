@@ -4,11 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Searchable;
+use App\Traits\Filterable;
+
 
 class Course extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    use Searchable, Filterable;
+
 
     protected $appends = [
         'preview_url',
