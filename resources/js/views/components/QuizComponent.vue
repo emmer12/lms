@@ -143,7 +143,7 @@
                                         :for="'opt-' + option.id"
                                         v-html="option.description"
                                     ></label>
-                                    <span v-if="option.is_correct">Yes</span>
+                                    <!-- <span v-if="option.is_correct">Yes</span> -->
                                 </div>
                             </div>
 

@@ -176,7 +176,7 @@ class LessonService
     private function getCoursePoint($course_id)
     {
         $lessons = Lesson::where('course_id', $course_id)->get();
-        $totalLesson = floor(100 / count($lessons));
+        $totalLesson = round(100 / count($lessons));
 
         return $totalLesson;
     }

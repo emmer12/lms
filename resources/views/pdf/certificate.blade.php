@@ -36,7 +36,7 @@
 
 <body>
     <div id="cert-body">
-        <img src="storage/course/certificates/grace.jpg" alt=""
+        <img src="/storage/{{$path}}" alt=""
             style="position: absolute; z-index: 1;inset:0;margin:auto;height:100%;width:100%">
         <div class="details">
             <h1>{{ $full_name }}</h1>

@@ -15,7 +15,7 @@ class PageService
      */
     public function index()
     {
-        $courses = Course::withCount('lessons', 'users')->orderBy('created_at', 'desc')->take(3)->get();
+        $courses = Course::withCount('lessons', 'users')->where('published', true)->orderBy('created_at', 'desc')->take(3)->get();
         $featuredCourse = Course::withCount('lessons', 'users')->where('featured', 1)->first();
 
         return [

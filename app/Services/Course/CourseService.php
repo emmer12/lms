@@ -4,6 +4,7 @@ namespace App\Services\Course;
 
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\EnrollmentResource;
+use App\Models\Certificate;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\CourseMaterial;
@@ -120,7 +121,7 @@ class CourseService
             $currentLesson = $course->lessons()->orderBy('sortOrder', 'asc')->first();
         }
 
-        $completedLessons = Auth::user()->lessons()->where('completed', 1)->get()->pluck('id')->toArray();
+        $completedLessons = Auth::user()->lessons()->where('completed', 1)->where('course_id', $course->id)->get()->pluck('id')->toArray();
 
         $prevLesson = $course->lessons()
             ->whereIn('id', $completedLessons)
@@ -306,10 +307,13 @@ class CourseService
 
     private function sendCertificate($course)
     {
+        $certificate = Certificate::where('course_id', $course->id)->first();
+        $path = $certificate->path;
         $currentDate = Carbon::now()->format('d/m/Y');
         $data = [
             "full_name" => auth()->user()->full_name,
-            "date" => $currentDate
+            "date" => $currentDate,
+            "path" => $path
         ];
         $pdf = Pdf::loadView('pdf.certificate', $data);
         $customPaper = array(0, 0, 1056, 816);
