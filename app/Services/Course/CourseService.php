@@ -121,7 +121,7 @@ class CourseService
             $currentLesson = $course->lessons()->orderBy('sortOrder', 'asc')->first();
         }
 
-        $completedLessons = Auth::user()->lessons()->where('completed', 1)->where('course_id', $course->id)->get()->pluck('id')->toArray();
+        $completedLessons = Auth::user()->lessons()->where('completed', 1)->get()->pluck('id')->toArray();
 
         $prevLesson = $course->lessons()
             ->whereIn('id', $completedLessons)

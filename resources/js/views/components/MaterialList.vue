@@ -47,6 +47,17 @@
                     <div v-if="material.source == 'upload'">
                         <video controls :src="material.full_path"></video>
                     </div>
+                    <div v-else-if="material.source == 'video_link'">
+                        <video-player
+                            :src="material.video_link"
+                            poster=""
+                            controls
+                            :loop="true"
+                            :volume="0.6"
+                            style="width: 100%; height: 400px"
+                        />
+                        <!-- <video controls :src="material.video_link"></video> -->
+                    </div>
                     <div v-else>
                         <div v-html="material.embed_code"></div>
                     </div>
@@ -75,6 +86,8 @@ import Video from "@/views/components/icons/Video.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import gsap from "gsap";
+import { VideoPlayer } from "@videojs-player/vue";
+import "video.js/dist/video-js.css";
 
 export default {
     props: ["material"],
@@ -85,6 +98,7 @@ export default {
         Audio,
         Video,
         Download,
+        VideoPlayer,
     },
     setup(props, { emit }) {
         const router = useRouter();

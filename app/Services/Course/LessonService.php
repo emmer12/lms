@@ -160,7 +160,7 @@ class LessonService
             $cu = CourseUser::where('course_id', $course->first()->course_id)->where('user_id', auth()->id())->first();
             $totalPoint = $cu->progress + $points;
             $certificate_eligible = false;
-            if ($totalPoint >= 95) {
+            if ($totalPoint >= 80) {
                 $certificate_eligible = true;
             }
 

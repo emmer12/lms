@@ -143,7 +143,7 @@
                                         :for="'opt-' + option.id"
                                         v-html="option.description"
                                     ></label>
-                                    <!-- <span v-if="option.is_correct">Yes</span> -->
+                                    <span v-if="option.is_correct">Yes</span>
                                 </div>
                             </div>
 
@@ -181,7 +181,7 @@
                 <div class="ck" v-html="currentLesson.description"></div>
                 <Button
                     :disabled="data.loading"
-                    @click="startQuiz()"
+                    @click="startQuiz"
                     label="Start Quiz"
                 />
             </div>

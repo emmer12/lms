@@ -22,7 +22,8 @@ class StoreMaterialRequest extends FormRequest
             'content_type'   => 'required|string',
             'source' => "sometimes",
             'embed_code' => "sometimes",
-            'file' => 'sometimes'
+            'file' => 'sometimes',
+            'video_link' => 'sometimes'
         ];
     }
 }

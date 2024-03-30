@@ -173,6 +173,7 @@ class QuizService
             "answers" => $answers,
             "user_id" => auth()->id(),
             "num_attempted" => $num_attempt,
+            "course_id" => $quiz->course_id,
             "total_questions"
             => count($questions_ids),
             "num_correct" => $num_correct,
@@ -200,10 +201,6 @@ class QuizService
         }])->where('lesson_id', $lesson_id)->where('user_id', auth()->id())->firstOrFail();
         return new QuizResource($quiz);
     }
-
-
-
-
 
     /**
      * Deletes resource in the database

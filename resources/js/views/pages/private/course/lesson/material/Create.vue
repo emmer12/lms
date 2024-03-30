@@ -39,11 +39,21 @@
                     <multiselect
                         name="source"
                         v-model="form.source"
-                        :options="['embed', 'upload']"
+                        :options="['embed', 'upload', 'video_link']"
                     />
                 </div>
 
-                <div class="mb-4" v-if="form.source == 'embed'">
+                <div class="mb-4" v-if="form.source == 'video_link'">
+                    <TextInput
+                        class="mb-4"
+                        type="textarea"
+                        :required="true"
+                        name="video_link"
+                        v-model="form.video_link"
+                        :label="trans('Video Url')"
+                    />
+                </div>
+                <div class="mb-4" v-else-if="form.source == 'embed'">
                     <TextInput
                         class="mb-4"
                         type="textarea"

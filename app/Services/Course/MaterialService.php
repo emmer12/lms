@@ -73,8 +73,6 @@ class MaterialService
         }
 
         $record = CourseMaterial::query()->create($data);
-
-
         return $record->fresh();
     }
 
